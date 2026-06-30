@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#1B3A6B;--pa:#EEF3FD;
+  --a:#E05534;--aa:#FEF3EF;
+  --bg:#F4F3EF;--s:#FFFFFF;--s2:#F8F7F4;
+  --bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.18);
+  --t1:#18181E;--t2:#4E4E68;--t3:#96969B;
+  --g:#1B7A50;--ga:#EBF8F3;
+  --am:#B35108;--ama:#FFF8EB;
+  --up:#C0392B;--dn:#2563EB;--dna:#EEF3FF;
+  --sh:0 1px 12px rgba(0,0,0,.07)
+}
+body{font-family:'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased}
+button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
+input{font-family:inherit}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk{background:linear-gradient(90deg,#e8e7e2 25%,#f2f1ec 50%,#e8e7e2 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+<!-- NAV -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)">
+  <div style="height:52px;display:flex;align-items:center;padding:0 16px;gap:10px;max-width:480px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:7px;flex:1">
+      <div style="width:26px;height:26px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      </div>
+      <span style="font-size:16px;font-weight:800;color:var(--p);letter-spacing:-0.3px">[서비스명]</span>
+    </div>
+    <span style="font-size:11px;font-weight:600;color:var(--g);background:var(--ga);padding:4px 10px;border-radius:20px;white-space:nowrap">국토부 기준 · 참고용</span>
+  </div>
+</div>
+
+<div style="max-width:480px;margin:0 auto;padding-top:52px;padding-bottom:72px">
+
+<!-- ===== HOME ===== -->
+<div style="display:{{ dHome }};animation:fadeUp .4s ease">
+  <div style="padding:44px 22px 28px;text-align:center">
+    <div style="display:inline-flex;align-items:center;gap:6px;background:var(--dna);color:var(--dn);padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:22px">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      매수 전 비용·리스크 안내
+    </div>
+    <h1 style="font-size:30px;font-weight:900;line-height:1.35;letter-spacing:-0.6px;color:var(--t1);word-break:keep-all;margin-bottom:14px">이 집, 내 상황에서<br><span style="color:var(--p)">실제로 얼마 드나요?</span></h1>
+    <p style="font-size:15px;color:var(--t2);line-height:1.72;word-break:keep-all">세금·규제·비용을 내 조건에 맞게<br>쉬운 말로 한 번에 정리해 드려요.</p>
+  </div>
+
+  <div style="padding:0 16px 16px">
+    <div style="background:var(--s);border-radius:18px;padding:20px;box-shadow:0 6px 32px rgba(0,0,0,.12)">
+      <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.3px;margin-bottom:12px">단지 또는 동 이름으로 검색</div>
+      <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:12px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span style="font-size:15px;color:var(--t3)">테라팰리스 건대2차…</span>
+      </div>
+      <div style="border:1px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:14px">
+        <div onClick="{{ goComplex }}" style="padding:13px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);cursor:pointer">
+          <div>
+            <div style="font-size:14px;font-weight:700">테라팰리스 건대2차</div>
+            <div style="font-size:12px;color:var(--t3);margin-top:2px">서울 광진구 자양동 · 2003년 · 590세대</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div style="padding:13px 15px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+          <div>
+            <div style="font-size:14px;font-weight:700">건대입구역 두산위브</div>
+            <div style="font-size:12px;color:var(--t3);margin-top:2px">서울 광진구 자양동 · 2007년 · 315세대</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+      <button onClick="{{ goComplex }}" style="width:100%;background:var(--p);color:white;border-radius:12px;padding:15px;font-size:16px;font-weight:700">단지 분석 시작하기</button>
+    </div>
+  </div>
+
+  <div style="padding:4px 16px 24px">
+    <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.3px;margin-bottom:10px">자주 찾는 지역</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span style="background:var(--s);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--t2)">자양동</span>
+      <span style="background:var(--s);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--t2)">중곡동</span>
+      <span style="background:var(--s);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--t2)">화양동</span>
+      <span style="background:var(--s);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--t2)">군자동</span>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 28px">
+    <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.3px;margin-bottom:14px">이렇게 도와드려요</div>
+    <div style="background:var(--s);border-radius:16px;overflow:hidden;box-shadow:var(--sh)">
+      <div style="padding:18px;display:flex;gap:14px;border-bottom:1px solid var(--bd)">
+        <div style="width:30px;height:30px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="color:white;font-size:13px;font-weight:800">1</span></div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:4px">단지를 검색해요</div><div style="font-size:13px;color:var(--t2);line-height:1.65">국토부 실거래가·평단가·전세가율을 확인해요.</div></div>
+      </div>
+      <div style="padding:18px;display:flex;gap:14px;border-bottom:1px solid var(--bd)">
+        <div style="width:30px;height:30px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="color:white;font-size:13px;font-weight:800">2</span></div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:4px">내 상황을 입력해요</div><div style="font-size:13px;color:var(--t2);line-height:1.65">보유 주택·실거주 여부 — 부동산 공부 없이 답해요.</div></div>
+      </div>
+      <div style="padding:18px;display:flex;gap:14px">
+        <div style="width:30px;height:30px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="color:white;font-size:13px;font-weight:800">3</span></div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:4px">리스크 리포트를 받아요</div><div style="font-size:13px;color:var(--t2);line-height:1.65">세금·근거 법조문·총 비용을 쉬운 말로 정리해요.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 16px">
+    <div style="background:var(--ga);border-radius:14px;padding:16px 18px;border:1px solid rgba(27,122,80,.15);display:flex;gap:12px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div><div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:3px">참고용 정보</div><div style="font-size:12px;color:var(--t2);line-height:1.65">국토부·법제처 기반 참고 안내예요. 정확한 판단은 세무사·공인중개사와 함께 확인하세요.</div></div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 40px">
+    <div style="background:var(--p);border-radius:18px;padding:24px 22px">
+      <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.8px;margin-bottom:8px">월간 뉴스레터</div>
+      <div style="font-size:19px;font-weight:800;color:white;line-height:1.38;margin-bottom:6px;word-break:keep-all">바뀌는 규제·세금,<br>나에게 미치는 영향만 쉽게</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:20px">매달 규제 변화를 이메일로 보내드려요.</div>
+      <div style="display:flex;gap:8px">
+        <input type="email" value="{{ emailVal }}" onInput="{{ onEmail }}" placeholder="이메일 주소" style="flex:1;min-width:0;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:12px 13px;color:white;font-size:14px;outline:none"/>
+        <button onClick="{{ subscribe }}" style="background:var(--a);color:white;border-radius:9px;padding:12px 18px;font-size:14px;font-weight:700;flex-shrink:0">{{ subBtn }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPLEX ANALYSIS ===== -->
+<div style="display:{{ dComplex }}">
+  <!-- Skeleton -->
+  <div style="display:{{ dLoad }};padding:20px 16px;animation:fadeIn .3s">
+    <div style="height:90px;margin-bottom:12px" class="sk"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px"><div style="height:100px" class="sk"></div><div style="height:100px" class="sk"></div></div>
+    <div style="height:165px;margin-bottom:12px" class="sk"></div>
+    <div style="height:110px" class="sk"></div>
+  </div>
+  <!-- Data -->
+  <div style="display:{{ dComplexData }};animation:fadeUp .4s ease">
+    <div style="background:var(--s);padding:20px 18px 18px;border-bottom:1px solid var(--bd)">
+      <div style="font-size:12px;color:var(--t3);margin-bottom:4px">서울 광진구 자양동</div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-0.4px;margin-bottom:12px">테라팰리스 건대2차</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span style="background:var(--ama);color:var(--am);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">투기과열지구</span>
+        <span style="background:var(--ga);color:var(--g);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">전세가율 안정</span>
+        <span style="background:var(--s2);color:var(--t2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--bd)">2003년 · 590세대</span>
+      </div>
+    </div>
+    <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px;font-weight:600">최근 평균 평단가</div>
+          <div style="font-size:22px;font-weight:900;letter-spacing:-0.5px">6,964<span style="font-size:11px;font-weight:500;color:var(--t2)"> 만/평</span></div>
+          <div style="display:flex;align-items:center;gap:4px;margin-top:7px"><span style="color:var(--up);font-size:12px;font-weight:700">▲ +3.2%</span><span style="color:var(--t3);font-size:11px"> 6개월</span></div>
+        </div>
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px;font-weight:600">전세가율</div>
+          <div style="font-size:22px;font-weight:900;letter-spacing:-0.5px">52.3<span style="font-size:11px;font-weight:500;color:var(--t2)">%</span></div>
+          <div style="margin-top:7px"><span style="background:var(--ga);color:var(--g);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">안정</span></div>
+        </div>
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px;font-weight:600">최근 실거래 (84㎡)</div>
+          <div style="font-size:19px;font-weight:900;letter-spacing:-0.3px">9억 2,000만</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:7px">2026.06.12</div>
+        </div>
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px;font-weight:600">6개월 거래량</div>
+          <div style="font-size:22px;font-weight:900;letter-spacing:-0.5px">33<span style="font-size:11px;font-weight:500;color:var(--t2)"> 건</span></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:7px">1–6월 합산</div>
+        </div>
+      </div>
+
+      <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-size:14px;font-weight:700">평단가 추이</div>
+          <div style="font-size:11px;color:var(--t3)">2026년 1–6월 · 만원/평</div>
+        </div>
+        {{ lineChart }}
+        <div style="display:flex;justify-content:space-between;padding:6px 2px 0"><span style="font-size:11px;color:var(--t3)">1월</span><span style="font-size:11px;color:var(--t3)">2월</span><span style="font-size:11px;color:var(--t3)">3월</span><span style="font-size:11px;color:var(--t3)">4월</span><span style="font-size:11px;color:var(--t3)">5월</span><span style="font-size:11px;color:var(--t3)">6월</span></div>
+      </div>
+
+      <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-size:14px;font-weight:700">월별 거래량</div>
+          <div style="font-size:11px;color:var(--t3)">단위: 건</div>
+        </div>
+        {{ barChart }}
+        <div style="display:flex;justify-content:space-between;padding:6px 2px 0"><span style="font-size:11px;color:var(--t3)">1월</span><span style="font-size:11px;color:var(--t3)">2월</span><span style="font-size:11px;color:var(--t3)">3월</span><span style="font-size:11px;color:var(--t3)">4월</span><span style="font-size:11px;color:var(--t3)">5월</span><span style="font-size:11px;color:var(--t3)">6월</span></div>
+      </div>
+
+      <div style="background:var(--s);border-radius:14px;overflow:hidden;box-shadow:var(--sh)">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:14px;font-weight:700">최근 실거래</span>
+          <span style="font-size:11px;color:var(--t3)">국토부 실거래가</span>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:14px;font-weight:600">84.9㎡ (A타입)</div><div style="font-size:12px;color:var(--t3);margin-top:2px">2026.06.12 · 12층</div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:800">9억 2,000만</div><div style="font-size:11px;color:var(--up);margin-top:2px">▲ 직전 대비 +3,000만</div></div>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:14px;font-weight:600">84.9㎡ (A타입)</div><div style="font-size:12px;color:var(--t3);margin-top:2px">2026.05.28 · 8층</div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:800">8억 9,000만</div><div style="font-size:11px;color:var(--t3);margin-top:2px">전월 보합</div></div>
+        </div>
+        <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:14px;font-weight:600">59.7㎡ (B타입)</div><div style="font-size:12px;color:var(--t3);margin-top:2px">2026.05.14 · 5층</div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:800">7억 1,000만</div><div style="font-size:11px;color:var(--t3);margin-top:2px">전월 보합</div></div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--t3);text-align:center">출처: 국토교통부 실거래가 공개시스템 · 2026.6 기준</div>
+      <button onClick="{{ goConditions }}" style="width:100%;background:var(--a);color:white;border-radius:13px;padding:17px;font-size:16px;font-weight:700">이 단지로 매수 비용 계산하기 →</button>
+      <button style="width:100%;border:1.5px solid var(--bd2);border-radius:13px;padding:15px;font-size:14px;font-weight:600;color:var(--t2)">매물 보러가기 ↗ (네이버부동산)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONDITIONS ===== -->
+<div style="display:{{ dCond }}">
+  <div style="background:var(--s);border-bottom:1px solid var(--bd);padding:14px 18px;position:sticky;top:52px;z-index:100">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:700;color:var(--t2)">{{ stepLabel }}</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="font-size:12px;color:var(--t3)">{{ stepNum }}</div>
+        <button onClick="{{ stepBack }}" style="display:{{ dBack }};font-size:13px;color:var(--p);font-weight:600">← 이전</button>
+      </div>
+    </div>
+    <div style="height:3px;background:var(--bd);border-radius:2px;overflow:hidden">
+      <div style="height:100%;background:var(--p);border-radius:2px;width:{{ progW }};transition:width .3s ease"></div>
+    </div>
+  </div>
+
+  <div style="padding:22px 18px 32px">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px">
+      <span style="background:var(--pa);color:var(--p);padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600">테라팰리스 건대2차</span>
+      <span style="background:var(--ama);color:var(--am);padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600">광진구 · 투기과열지구</span>
+    </div>
+
+    <!-- S0: 보유수 -->
+    <div style="display:{{ s0d }}">
+      <div style="font-size:24px;font-weight:900;line-height:1.35;letter-spacing:-0.4px;margin-bottom:6px;word-break:keep-all">지금 가진 집이<br>몇 채인가요?</div>
+      <div style="font-size:14px;color:var(--t2);margin-bottom:26px">본인·배우자 합산 기준이에요</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ pickH0 }}" style="background:{{ h0bg }};border:2px solid {{ h0br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ h0c }}">없음 · 처음 사는 집이에요</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">무주택자 — 취득세 혜택 가능</div>
+        </button>
+        <button onClick="{{ pickH1 }}" style="background:{{ h1bg }};border:2px solid {{ h1br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ h1c }}">1채 · 지금 집 팔고 이사 예정</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">일시적 2주택 조건 확인 필요</div>
+        </button>
+        <button onClick="{{ pickH2 }}" style="background:{{ h2bg }};border:2px solid {{ h2br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ h2c }}">2채 이상</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">다주택 — 취득세 중과 적용 가능</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- S1: 실거주 -->
+    <div style="display:{{ s1d }}">
+      <div style="font-size:24px;font-weight:900;line-height:1.35;letter-spacing:-0.4px;margin-bottom:6px;word-break:keep-all">이 집에 직접<br>들어가 사실 건가요?</div>
+      <div style="font-size:14px;color:var(--t2);margin-bottom:14px">LTV 한도와 의무거주 조건에 영향을 줘요</div>
+      <div style="background:var(--ama);border-radius:10px;padding:12px 14px;margin-bottom:22px;display:flex;gap:8px;align-items:flex-start">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--am)" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div style="font-size:13px;color:var(--am);font-weight:600;line-height:1.55">투기과열지구 자동 적용 — LTV 최대 40%, 의무거주 조건 있을 수 있어요</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ pickLiY }}" style="background:{{ liYbg }};border:2px solid {{ liYbr }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ liYc }}">네, 이사 들어갈 거예요</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">실수요자 기준 LTV 40% 적용</div>
+        </button>
+        <button onClick="{{ pickLiN }}" style="background:{{ liNbg }};border:2px solid {{ liNbr }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ liNc }}">아니요, 세입자 두거나 미정</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">의무거주 조건 해당 여부 별도 확인 필요</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- S2: 가격 -->
+    <div style="display:{{ s2d }}">
+      <div style="font-size:24px;font-weight:900;line-height:1.35;letter-spacing:-0.4px;margin-bottom:6px;word-break:keep-all">매수 예상가가<br>얼마인가요?</div>
+      <div style="font-size:14px;color:var(--t2);margin-bottom:26px">9억 초과 여부에 따라 세율이 달라져요</div>
+      <div style="background:var(--s2);border-radius:14px;padding:24px 20px;margin-bottom:20px;text-align:center;border:2px solid var(--bd)">
+        <div style="font-size:12px;color:var(--t3);font-weight:600;margin-bottom:10px">억원 단위로 입력</div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px">
+          <input type="number" step="0.1" min="1" max="200" value="{{ priceVal }}" onInput="{{ onPrice }}" style="width:130px;font-size:48px;font-weight:900;letter-spacing:-2px;color:var(--p);border:none;background:transparent;text-align:right;outline:none"/>
+          <span style="font-size:26px;font-weight:600;color:var(--t2)">억</span>
+        </div>
+        <div style="font-size:12px;color:var(--t3);margin-top:8px">{{ priceNote }}</div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px">
+        <button onClick="{{ setP7 }}" style="flex:1;min-width:50px;padding:11px 4px;border:1.5px solid {{ p7br }};border-radius:10px;background:{{ p7bg }};font-size:14px;font-weight:600;color:{{ p7c }}">7억</button>
+        <button onClick="{{ setP9 }}" style="flex:1;min-width:50px;padding:11px 4px;border:1.5px solid {{ p9br }};border-radius:10px;background:{{ p9bg }};font-size:14px;font-weight:600;color:{{ p9c }}">9억</button>
+        <button onClick="{{ setP92 }}" style="flex:1;min-width:50px;padding:11px 4px;border:1.5px solid {{ p92br }};border-radius:10px;background:{{ p92bg }};font-size:14px;font-weight:600;color:{{ p92c }}">9.2억</button>
+        <button onClick="{{ setP10 }}" style="flex:1;min-width:50px;padding:11px 4px;border:1.5px solid {{ p10br }};border-radius:10px;background:{{ p10bg }};font-size:14px;font-weight:600;color:{{ p10c }}">10억</button>
+        <button onClick="{{ setP12 }}" style="flex:1;min-width:50px;padding:11px 4px;border:1.5px solid {{ p12br }};border-radius:10px;background:{{ p12bg }};font-size:14px;font-weight:600;color:{{ p12c }}">12억</button>
+      </div>
+      <button onClick="{{ nextStep }}" style="width:100%;background:var(--a);color:white;border-radius:13px;padding:16px;font-size:16px;font-weight:700">다음으로 →</button>
+    </div>
+
+    <!-- S3: 면적 -->
+    <div style="display:{{ s3d }}">
+      <div style="font-size:24px;font-weight:900;line-height:1.35;letter-spacing:-0.4px;margin-bottom:6px;word-break:keep-all">어떤 면적 타입을<br>생각하고 계세요?</div>
+      <div style="font-size:14px;color:var(--t2);margin-bottom:26px">85㎡ 초과 시 농어촌특별세가 발생해요</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ pickA59 }}" style="background:{{ a59bg }};border:2px solid {{ a59br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ a59c }}">59㎡ (약 18평)</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">소형 · 85㎡ 이하 → 농특세 비과세</div>
+        </button>
+        <button onClick="{{ pickA84 }}" style="background:{{ a84bg }};border:2px solid {{ a84br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ a84c }}">84㎡ (약 25평) <span style="font-size:11px;background:var(--dna);color:var(--dn);padding:2px 7px;border-radius:8px;margin-left:4px;font-weight:700">국민면적</span></div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">중형 · 85㎡ 이하 → 농특세 비과세</div>
+        </button>
+        <button onClick="{{ pickA114 }}" style="background:{{ a114bg }};border:2px solid {{ a114br }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ a114c }}">114㎡ (약 34평)</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">대형 · 85㎡ 초과 → 농특세 발생</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- S4: 대출 -->
+    <div style="display:{{ s4d }}">
+      <div style="font-size:24px;font-weight:900;line-height:1.35;letter-spacing:-0.4px;margin-bottom:6px;word-break:keep-all">대출을 받을<br>계획이 있나요?</div>
+      <div style="font-size:14px;color:var(--t2);margin-bottom:14px">이자 비용과 대출 한도를 함께 안내해 드려요</div>
+      <div style="background:var(--pa);border-radius:10px;padding:12px 14px;margin-bottom:22px">
+        <div style="font-size:13px;color:var(--p);font-weight:600">투기과열지구 LTV 40% 적용 → {{ loanEst }}억 한도 추정</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+        <button onClick="{{ pickLnY }}" style="background:{{ lnYbg }};border:2px solid {{ lnYbr }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ lnYc }}">네, 대출 받을 거예요</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">LTV·DSR 40% 기준 안내</div>
+        </button>
+        <button onClick="{{ pickLnN }}" style="background:{{ lnNbg }};border:2px solid {{ lnNbr }};border-radius:14px;padding:18px;text-align:left;width:100%">
+          <div style="font-size:16px;font-weight:700;color:{{ lnNc }}">아니요, 전액 자기자금이에요</div>
+        </button>
+      </div>
+      <button onClick="{{ goReport }}" style="width:100%;background:var(--a);color:white;border-radius:13px;padding:17px;font-size:16px;font-weight:700">비용·리스크 리포트 보기 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REPORT ===== -->
+<div style="display:{{ dReport }};animation:fadeUp .35s ease">
+  <!-- Conditions strip -->
+  <div style="background:var(--s);border-bottom:1px solid var(--bd);padding:14px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+      <span style="background:var(--bg);border:1px solid var(--bd);color:var(--t2);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600">{{ rHomes }}</span>
+      <span style="background:var(--ama);color:var(--am);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600">광진구 · 투기과열지구</span>
+      <span style="background:var(--bg);border:1px solid var(--bd);color:var(--t2);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600">{{ rPrice }}억</span>
+      <span style="background:var(--bg);border:1px solid var(--bd);color:var(--t2);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600">{{ rArea }}㎡</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <span style="background:var(--dna);color:var(--dn);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700">{{ rAtBadge }}</span>
+      <span style="background:var(--ama);color:var(--am);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700">투기과열지구</span>
+      <span style="background:var(--ga);color:var(--g);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700">{{ rMidBadge }}</span>
+      <span style="background:var(--ama);color:var(--am);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700">LTV 40%</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div style="background:#142D54;padding:36px 20px 30px;text-align:center;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-50px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.025)"></div>
+    <div style="position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.02)"></div>
+    <div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500;margin-bottom:10px;position:relative">매매가 외 예상 추가 비용 (참고)</div>
+    <div style="font-size:58px;font-weight:900;color:white;letter-spacing:-3px;line-height:1;font-variant-numeric:tabular-nums;margin-bottom:4px;position:relative">{{ cTotal }}</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:22px;position:relative">매매가 {{ cPrice }}억 별도</div>
+    <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:16px 20px;position:relative">
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:5px">총 예상 매입 비용</div>
+      <div style="font-size:26px;font-weight:900;color:white;letter-spacing:-0.5px;font-variant-numeric:tabular-nums">{{ cTotalBuy }}</div>
+    </div>
+  </div>
+
+  <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+
+    <!-- Breakdown card -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:10px">비용 내역</div>
+      <div style="background:var(--s);border-radius:16px;overflow:hidden;box-shadow:var(--sh)">
+
+        <div style="border-bottom:1px solid var(--bd)">
+          <div style="padding:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:var(--g);flex-shrink:0"></div><span style="font-size:15px;font-weight:700">취득세</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">취득가액 × {{ cAtRate }}%{{ cFtNote }}</div></div>
+            <div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;font-variant-numeric:tabular-nums">{{ cAt }}</div><button onClick="{{ togAt }}" style="margin-top:6px;background:var(--pa);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--p)">근거 보기 {{ atA }}</button></div>
+          </div>
+          <div style="display:{{ atD }};background:var(--s2);border-top:1px solid var(--bd);padding:14px 16px">
+            <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px">지방세법 제11조 (주택 취득세)</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:10px">주택 취득가액에 따라 세율이 달라져요. 6억 이하 1%, 6억~9억 점진, 9억 초과 3%예요. 다주택자는 투기과열지구 기준 8%·12% 중과돼요.</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="background:var(--bg);color:var(--t3);padding:4px 9px;border-radius:5px;font-size:11px;border:1px solid var(--bd)">시행: 2020.08.12</span><a href="https://www.law.go.kr" target="_blank" style="color:var(--p);font-size:11px;text-decoration:none;border:1px solid var(--bd);padding:4px 9px;border-radius:5px;background:var(--s)">원문 보기 ↗</a></div>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid var(--bd)">
+          <div style="padding:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:var(--g);flex-shrink:0"></div><span style="font-size:15px;font-weight:700">지방교육세</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">취득세액 × 20%</div></div>
+            <div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;font-variant-numeric:tabular-nums">{{ cEdu }}</div><button onClick="{{ togEt }}" style="margin-top:6px;background:var(--pa);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--p)">근거 보기 {{ etA }}</button></div>
+          </div>
+          <div style="display:{{ etD }};background:var(--s2);border-top:1px solid var(--bd);padding:14px 16px">
+            <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px">지방세법 제151조 (지방교육세)</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:10px">취득세 납부 시 취득세액의 20%를 지방교육세로 함께 납부해요. 별도 신고 없이 자동 부과돼요.</div>
+            <div style="display:flex;gap:7px"><span style="background:var(--bg);color:var(--t3);padding:4px 9px;border-radius:5px;font-size:11px;border:1px solid var(--bd)">시행: 2011.01.01</span><a href="https://www.law.go.kr" target="_blank" style="color:var(--p);font-size:11px;text-decoration:none;border:1px solid var(--bd);padding:4px 9px;border-radius:5px;background:var(--s)">원문 보기 ↗</a></div>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid var(--bd)">
+          <div style="padding:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:{{ agDot }};flex-shrink:0"></div><span style="font-size:15px;font-weight:700">농어촌특별세</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">{{ agDesc }}</div></div>
+            <div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;color:{{ agColor }};font-variant-numeric:tabular-nums">{{ cAgri }}</div><button onClick="{{ togAg }}" style="margin-top:6px;background:var(--pa);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--p)">근거 보기 {{ agA }}</button></div>
+          </div>
+          <div style="display:{{ agD }};background:var(--s2);border-top:1px solid var(--bd);padding:14px 16px">
+            <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px">농어촌특별세법 제5조</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:10px">전용면적 85㎡ 이하 주택은 농특세 비과세예요. 85㎡ 초과 시 취득가액의 0.2%가 부과돼요.</div>
+            <div style="display:flex;gap:7px"><span style="background:var(--bg);color:var(--t3);padding:4px 9px;border-radius:5px;font-size:11px;border:1px solid var(--bd)">시행: 2010.01.01</span><a href="https://www.law.go.kr" target="_blank" style="color:var(--p);font-size:11px;text-decoration:none;border:1px solid var(--bd);padding:4px 9px;border-radius:5px;background:var(--s)">원문 보기 ↗</a></div>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid var(--bd)">
+          <div style="padding:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:var(--dn);flex-shrink:0"></div><span style="font-size:15px;font-weight:700">등기 비용</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">등록면허세(취득가 × 0.8%) + 교육세 20%</div></div>
+            <div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;font-variant-numeric:tabular-nums">{{ cReg }}</div><button onClick="{{ togRt }}" style="margin-top:6px;background:var(--pa);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--p)">근거 보기 {{ rtA }}</button></div>
+          </div>
+          <div style="display:{{ rtD }};background:var(--s2);border-top:1px solid var(--bd);padding:14px 16px">
+            <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px">지방세법 제28조 (등록면허세)</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:10px">소유권 이전 등기 시 취득가액의 0.8%를 등록면허세로, 이 금액의 20%를 지방교육세로 납부해요. 등기 신청일에 납부해요.</div>
+            <div style="display:flex;gap:7px"><span style="background:var(--bg);color:var(--t3);padding:4px 9px;border-radius:5px;font-size:11px;border:1px solid var(--bd)">시행: 2011.01.01</span><a href="https://www.law.go.kr" target="_blank" style="color:var(--p);font-size:11px;text-decoration:none;border:1px solid var(--bd);padding:4px 9px;border-radius:5px;background:var(--s)">원문 보기 ↗</a></div>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid var(--bd)">
+          <div style="padding:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:var(--am);flex-shrink:0"></div><span style="font-size:15px;font-weight:700">부동산 중개보수</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">상한 {{ cBkRate }}% · 실제 협의 가능</div></div>
+            <div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800">최대 {{ cBk }}</div><button onClick="{{ togBf }}" style="margin-top:6px;background:var(--pa);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--p)">근거 보기 {{ bfA }}</button></div>
+          </div>
+          <div style="display:{{ bfD }};background:var(--s2);border-top:1px solid var(--bd);padding:14px 16px">
+            <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px">공인중개사법 시행규칙 제20조 (중개보수)</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:10px">9억 초과 주택 요율 상한 0.9%예요. 중개사와 협의해 낮출 수 있고 부가세(10%) 별도 발생할 수 있어요.</div>
+            <div style="display:flex;gap:7px"><span style="background:var(--ama);color:var(--am);padding:4px 9px;border-radius:5px;font-size:11px;font-weight:600">변동 가능 항목</span><span style="background:var(--bg);color:var(--t3);padding:4px 9px;border-radius:5px;font-size:11px;border:1px solid var(--bd)">2021년 개정</span></div>
+          </div>
+        </div>
+
+        <div style="padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0"></div><span style="font-size:15px;font-weight:700">인지세 + 법무사 수수료</span></div><div style="font-size:12px;color:var(--t3);padding-left:13px">계약서 인지세 · 등기 대리 추정</div></div>
+          <div style="font-size:17px;font-weight:800;flex-shrink:0">{{ cOther }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan -->
+    <div style="display:{{ dLoan }}">
+      <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:10px">대출 개요 (참고)</div>
+      <div style="background:var(--s);border-radius:16px;padding:18px;box-shadow:var(--sh)">
+        <div style="display:flex;gap:12px;margin-bottom:14px">
+          <div style="flex:1;background:var(--pa);border-radius:10px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--p);font-weight:600;margin-bottom:6px">LTV 한도</div><div style="font-size:20px;font-weight:900;color:var(--p)">40%</div></div>
+          <div style="flex:1;background:var(--s2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--t2);font-weight:600;margin-bottom:6px">추정 대출 한도</div><div style="font-size:16px;font-weight:900;color:var(--t1);letter-spacing:-0.3px">{{ cLoanMax }}</div></div>
+        </div>
+        <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:10px">DSR 40% 규제가 동시 적용돼요. 실제 대출 가능액은 소득·금융기관 심사에 따라 달라요.</div>
+        <div style="font-size:12px;color:var(--am);background:var(--ama);border-radius:8px;padding:10px 12px;font-weight:600">실제 한도는 금융기관에서 확인하세요</div>
+      </div>
+    </div>
+
+    <!-- Questions checklist -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:10px">전문가에게 확인할 사항</div>
+      <div style="background:var(--s);border-radius:16px;overflow:hidden;box-shadow:var(--sh)">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:14px;font-weight:700">중개사·세무사에게 물어볼 것</span>
+          <button onClick="{{ copyQs }}" style="font-size:12px;color:var(--p);font-weight:600;background:var(--pa);border-radius:20px;padding:4px 11px">{{ qsCopyTxt }}</button>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;gap:10px"><div style="width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:7px"></div><div style="font-size:14px;color:var(--t2);line-height:1.6">이 단지 실거주 의무 기간이 있나요?</div></div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;gap:10px"><div style="width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:7px"></div><div style="font-size:14px;color:var(--t2);line-height:1.6">잔금일에 대출 실행이 가능한지 확인해 주세요</div></div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;gap:10px"><div style="width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:7px"></div><div style="font-size:14px;color:var(--t2);line-height:1.6">공시가격 기준 취득세 계산이 맞는지 확인해 주세요</div></div>
+        <div style="padding:14px 16px;display:flex;gap:10px"><div style="width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:7px"></div><div style="font-size:14px;color:var(--t2);line-height:1.6">중개보수 부가세 포함 최종 금액이 얼마인가요?</div></div>
+      </div>
+    </div>
+
+    <!-- Concepts -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:10px">참고 개념</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px">
+            <div style="font-size:14px;font-weight:700">양도소득세</div>
+            <span style="background:var(--ama);color:var(--am);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0">현재 정책 확인 필요</span>
+          </div>
+          <div style="font-size:13px;color:var(--t2);line-height:1.65">나중에 집을 팔 때 생기는 세금이에요. 보유·거주 기간에 따라 크게 달라지고 정책이 자주 바뀌어요. 매도 전 세무사 확인이 꼭 필요해요.</div>
+        </div>
+        <div style="background:var(--s);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px">
+            <div style="font-size:14px;font-weight:700">종합부동산세</div>
+            <span style="background:var(--ga);color:var(--g);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0">{{ kobBadge }}</span>
+          </div>
+          <div style="font-size:13px;color:var(--t2);line-height:1.65">{{ kobNote }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px">
+      <button onClick="{{ goConditions }}" style="flex:1;border:1.5px solid var(--bd2);border-radius:13px;padding:15px;font-size:14px;font-weight:600;color:var(--t2)">다시 계산</button>
+      <button onClick="{{ copyReport }}" style="flex:1;background:var(--p);color:white;border-radius:13px;padding:15px;font-size:14px;font-weight:700">{{ reportCopyTxt }}</button>
+    </div>
+
+    <!-- Trust footer -->
+    <div style="background:var(--ga);border-radius:14px;padding:18px;border:1px solid rgba(27,122,80,.15)">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="font-size:13px;color:var(--t2);line-height:1.7"><strong style="color:var(--g)">참고용 정보입니다.</strong> 입력 조건과 공개 법령·데이터 기반 안내예요. 정확한 세액 산정·법률 판단은 세무사·공인중개사·법무사와 상담하세요.</div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);line-height:1.7">출처: 국토교통부 실거래가 공개시스템 · 법제처 국가법령정보센터 · 행정안전부 지방세<br>기준일: 2026년 6월 · 최종 업데이트: 2026.06.30</div>
+    </div>
+    <div style="height:4px"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- TAB BAR -->
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--bd)">
+  <div style="height:64px;display:flex;max-width:480px;margin:0 auto">
+    <button onClick="{{ goHome }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{ tHc }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      <span style="font-size:10px;font-weight:600">홈</span>
+    </button>
+    <button onClick="{{ goComplex }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{ tCc }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>
+      <span style="font-size:10px;font-weight:600">단지분석</span>
+    </button>
+    <button onClick="{{ goConditions }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{ tCoc }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      <span style="font-size:10px;font-weight:600">내 조건</span>
+    </button>
+    <button onClick="{{ goReport }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{ tRc }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span style="font-size:10px;font-weight:600">리포트</span>
+    </button>
+  </div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 390, &quot;height&quot;: 844 }
+}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home',
+    loading: false,
+    // conditions
+    step: 0,
+    homes: null,   // 0,1,2
+    liveIn: null,  // true/false
+    price: 9.2,
+    area: 84,
+    loan: null,    // true/false
+    // ui
+    expanded: {},
+    emailVal: '',
+    subDone: false,
+    qsCopied: false,
+    reportCopied: false,
+  };
+
+  nav(s) {
+    if (s === 'complex' && this.state.screen !== 'complex') {
+      this.setState({ screen: 'complex', loading: true });
+      setTimeout(() => this.setState({ loading: false }), 900);
+    } else {
+      this.setState({ screen: s });
+    }
+  }
+
+  startCond() { this.setState({ screen: 'conditions', step: 0, homes: null, liveIn: null, loan: null }); }
+
+  goToReport() { if (this.state.loan !== null) this.setState({ screen: 'report' }); }
+
+  expand(k) { this.setState(s => ({ expanded: { ...s.expanded, [k]: !s.expanded[k] } })); }
+
+  pick(k, v, nextStep) {
+    const u = { [k]: v };
+    if (nextStep != null) u.step = nextStep;
+    this.setState(u);
+  }
+
+  /* ── Tax calculations ── */
+  calcAcqTax(priceE, homes) {
+    const p = priceE * 10000; // 만원 단위
+    let rate;
+    if (homes >= 2) {
+      rate = 0.08; // 투기과열 2주택 중과(일반 경우)
+    } else {
+      if (p <= 60000) rate = 0.01;
+      else if (p <= 90000) rate = (p / 10000 - 6) * (2 / 30) / 100 + 0.01;
+      else rate = 0.03;
+    }
+    return Math.round(p * rate);
+  }
+
+  calcTotal(priceE, homes, area, hasLoan) {
+    const p = priceE * 10000;
+    const acq = this.calcAcqTax(priceE, homes);
+    const edu = Math.round(acq * 0.2);
+    const agri = area > 85 ? Math.round(p * 0.002) : 0;
+    const reg = Math.round(p * 0.008 * 1.2); // 등록면허세 + 교육세
+    const bkRate = priceE > 9 ? 0.009 : 0.005;
+    const bk = Math.round(p * bkRate);
+    const other = homes >= 2 ? 700000 : 650000;
+    return { acq, edu, agri, reg, bk, bkRate, other };
+  }
+
+  fmt(won) {
+    if (won >= 10000) {
+      const e = Math.floor(won / 10000);
+      const r = won % 10000;
+      return r > 0 ? `${e}억 ${r.toLocaleString()}만원` : `${e}억원`;
+    }
+    return `${won.toLocaleString()}만원`;
+  }
+
+  fmtShort(won) {
+    if (won >= 10000) {
+      const e = Math.floor(won / 10000);
+      const r = won % 10000;
+      return r > 0 ? `${e}억 ${r.toLocaleString()}만` : `${e}억`;
+    }
+    return `${won.toLocaleString()}만원`;
+  }
+
+  makeLineChart() {
+    const data = [6720, 6788, 6845, 6898, 6940, 6964];
+    const W = 300, H = 88, pad = 14, mn = 6700, mx = 6985;
+    const xs = data.map((_, i) => pad + (i / (data.length - 1)) * (W - pad * 2));
+    const ys = data.map(v => pad + (1 - (v - mn) / (mx - mn)) * (H - pad * 2));
+    const linePts = xs.map((x, i) => `${i ? 'L' : 'M'}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ');
+    const areaPts = linePts + ` L${xs[5].toFixed(1)},${H} L${xs[0].toFixed(1)},${H} Z`;
+    const e = React.createElement;
+    return e('svg', { key: 'lc', viewBox: `0 0 ${W} ${H}`, style: { width: '100%', display: 'block', overflow: 'visible' } },
+      e('defs', { key: 'd' }, e('linearGradient', { id: 'lcg', x1: '0', y1: '0', x2: '0', y2: '1' },
+        e('stop', { key: 'a', offset: '0%', stopColor: '#1B3A6B', stopOpacity: 0.12 }),
+        e('stop', { key: 'b', offset: '100%', stopColor: '#1B3A6B', stopOpacity: 0 }))),
+      e('path', { key: 'area', d: areaPts, fill: 'url(#lcg)' }),
+      e('path', { key: 'line', d: linePts, fill: 'none', stroke: '#1B3A6B', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' }),
+      ...xs.map((x, i) => e('circle', { key: `p${i}`, cx: x, cy: ys[i], r: i === 5 ? 4.5 : 3, fill: '#1B3A6B', stroke: 'white', strokeWidth: 1.5 })),
+      e('text', { key: 'lbl', x: xs[5] - 2, y: ys[5] - 8, fontSize: 10, fill: '#1B3A6B', fontWeight: 700, fontFamily: 'Pretendard,system-ui', textAnchor: 'end' }, '6,964만')
+    );
+  }
+
+  makeBarChart() {
+    const data = [3, 7, 5, 8, 6, 4];
+    const W = 300, H = 70, mx = 8, bW = 36;
+    const colW = W / data.length;
+    const e = React.createElement;
+    return e('svg', { key: 'bc', viewBox: `0 0 ${W} ${H}`, style: { width: '100%', display: 'block' } },
+      data.map((v, i) => {
+        const bh = Math.round((v / mx) * (H - 18));
+        const bx = colW * i + (colW - bW) / 2;
+        const isMax = v === mx;
+        return e('g', { key: i },
+          e('rect', { key: 'r', x: bx, y: H - bh - 2, width: bW, height: bh, rx: 5, fill: isMax ? '#1B3A6B' : '#D4E0F5' }),
+          e('text', { key: 't', x: bx + bW / 2, y: H - bh - 6, textAnchor: 'middle', fontSize: 9.5, fill: isMax ? '#1B3A6B' : '#96969B', fontWeight: isMax ? 700 : 400, fontFamily: 'Pretendard,system-ui' }, String(v))
+        );
+      })
+    );
+  }
+
+  renderVals() {
+    const { screen, loading, step, homes, liveIn, price, area, loan, expanded, emailVal, subDone, qsCopied, reportCopied } = this.state;
+    const on = s => screen === s;
+    const d = s => on(s) ? 'block' : 'none';
+    const df = s => on(s) ? 'flex' : 'none';
+    const tc = s => on(s) ? '#1B3A6B' : '#96969B';
+
+    // selected option styles
+    const selBg = sel => sel ? '#EEF3FD' : '#FFFFFF';
+    const selBr = sel => sel ? '#1B3A6B' : 'rgba(0,0,0,.1)';
+    const selC = sel => sel ? '#1B3A6B' : '#18181E';
+
+    // Tax calc
+    const h = homes ?? 0;
+    const p = price;
+    const costs = this.calcTotal(p, h, area, loan);
+    const { acq, edu, agri, reg, bk, bkRate, other } = costs;
+    const totalExtra = acq + edu + agri + reg + bk + other / 10000;
+    const totalBuy = p * 10000 + totalExtra;
+
+    const atRate = h >= 2 ? 8 : (p * 10000 > 90000 ? 3 : p * 10000 > 60000 ? '점진' : 1);
+    const loanMax = Math.round(p * 10000 * 0.4);
+
+    // Progress
+    const totalSteps = 5;
+    const progW = `${Math.round(((step + 1) / totalSteps) * 100)}%`;
+    const stepLabels = ['보유 주택 수', '실거주 여부', '매수 예상가', '면적 타입', '대출 계획'];
+
+    // Price note
+    const priceNote = p > 9 ? '9억 초과 → 취득세 3% 적용' : p >= 6 ? '6억~9억 구간 → 점진 세율 적용' : '6억 이하 → 취득세 1% 적용';
+
+    // Kob
+    const kobBadge = p <= 12 && h === 0 ? '해당 없음' : h >= 2 ? '추가 검토 필요' : '해당 없음';
+    const kobNote = `1주택자 기본공제 12억 이하이면 해당 없어요. 이 매물(${p}억) 단독 보유 시 종부세 대상이 아니에요.`;
+
+    // Agri
+    const isLargeArea = area > 85;
+    const agDot = isLargeArea ? '#B35108' : '#96969B';
+    const agDesc = isLargeArea ? `취득가액 × 0.2% (85㎡ 초과)` : '85㎡ 이하 — 비과세';
+    const agColor = isLargeArea ? '#18181E' : '#96969B';
+
+    // Homes badges
+    const rHomes = h === 0 ? '무주택' : h === 1 ? '1주택' : '다주택';
+    const rAtBadge = h >= 2 ? '취득세 중과' : '취득세 일반세율';
+    const rMidBadge = h === 0 ? '중과 해당 없음' : h === 1 ? '일시적2주택 확인' : '중과 적용';
+    const rArea = area;
+    const rPrice = p;
+
+    // cFtNote: if first time buyer (homes===0)
+    const cFtNote = h === 0 ? '' : '';
+
+    const copyQsText = () => {
+      const items = '✅ 이 단지 실거주 의무 기간이 있나요?\n✅ 잔금일에 대출 실행이 가능한지 확인해 주세요\n✅ 공시가격 기준 취득세 계산이 맞는지 확인해 주세요\n✅ 중개보수 부가세 포함 최종 금액이 얼마인가요?';
+      if (navigator.clipboard) navigator.clipboard.writeText(items);
+      this.setState({ qsCopied: true });
+      setTimeout(() => this.setState({ qsCopied: false }), 2000);
+    };
+
+    const copyReportText = () => {
+      const txt = `[서비스명] 매수 비용 리포트\n단지: 테라팰리스 건대2차 · ${p}억 · ${area}㎡\n\n▸ 취득세: ${this.fmtShort(acq)}\n▸ 지방교육세: ${this.fmtShort(edu)}\n▸ 등기비용: ${this.fmtShort(reg)}\n▸ 중개보수 최대: ${this.fmtShort(bk)}\n▸ 기타: ${Math.round(other/10000)}만원\n\n총 추가비용: ${this.fmtShort(totalExtra)}\n총 매입 비용: ${this.fmtShort(totalBuy)}\n\n※ 참고용 · 국토부 기준 2026.6`;
+      if (navigator.clipboard) navigator.clipboard.writeText(txt);
+      this.setState({ reportCopied: true });
+      setTimeout(() => this.setState({ reportCopied: false }), 2000);
+    };
+
+    return {
+      // screens
+      dHome: d('home'), dComplex: d('complex'), dCond: d('conditions'), dReport: d('report'),
+      dLoad: loading ? 'block' : 'none',
+      dComplexData: !loading ? 'block' : 'none',
+      dLoan: loan ? 'block' : 'none',
+      dBack: step > 0 ? 'inline' : 'none',
+
+      // nav
+      goHome: () => this.nav('home'),
+      goComplex: () => this.nav('complex'),
+      goConditions: () => this.startCond(),
+      goReport: () => this.goToReport(),
+      tHc: tc('home'), tCc: tc('complex'), tCoc: tc('conditions'), tRc: tc('report'),
+
+      // step
+      stepLabel: stepLabels[step] || '',
+      stepNum: `${step + 1} / ${totalSteps}`,
+      progW,
+      stepBack: () => this.setState(s => ({ step: Math.max(s.step - 1, 0) })),
+      nextStep: () => this.setState(s => ({ step: s.step + 1 })),
+
+      // step displays
+      s0d: step === 0 ? 'block' : 'none',
+      s1d: step === 1 ? 'block' : 'none',
+      s2d: step === 2 ? 'block' : 'none',
+      s3d: step === 3 ? 'block' : 'none',
+      s4d: step === 4 ? 'block' : 'none',
+
+      // homes
+      h0bg: selBg(homes === 0), h0br: selBr(homes === 0), h0c: selC(homes === 0),
+      h1bg: selBg(homes === 1), h1br: selBr(homes === 1), h1c: selC(homes === 1),
+      h2bg: selBg(homes === 2), h2br: selBr(homes === 2), h2c: selC(homes === 2),
+      pickH0: () => this.pick('homes', 0, 1),
+      pickH1: () => this.pick('homes', 1, 1),
+      pickH2: () => this.pick('homes', 2, 1),
+
+      // liveIn
+      liYbg: selBg(liveIn === true), liYbr: selBr(liveIn === true), liYc: selC(liveIn === true),
+      liNbg: selBg(liveIn === false), liNbr: selBr(liveIn === false), liNc: selC(liveIn === false),
+      pickLiY: () => this.pick('liveIn', true, 2),
+      pickLiN: () => this.pick('liveIn', false, 2),
+
+      // price
+      priceVal: price,
+      priceNote,
+      onPrice: e => this.setState({ price: parseFloat(e.target.value) || 9.2 }),
+      p7bg: selBg(price === 7), p7br: selBr(price === 7), p7c: selC(price === 7), setP7: () => this.setState({ price: 7 }),
+      p9bg: selBg(price === 9), p9br: selBr(price === 9), p9c: selC(price === 9), setP9: () => this.setState({ price: 9 }),
+      p92bg: selBg(price === 9.2), p92br: selBr(price === 9.2), p92c: selC(price === 9.2), setP92: () => this.setState({ price: 9.2 }),
+      p10bg: selBg(price === 10), p10br: selBr(price === 10), p10c: selC(price === 10), setP10: () => this.setState({ price: 10 }),
+      p12bg: selBg(price === 12), p12br: selBr(price === 12), p12c: selC(price === 12), setP12: () => this.setState({ price: 12 }),
+
+      // area
+      a59bg: selBg(area === 59), a59br: selBr(area === 59), a59c: selC(area === 59), pickA59: () => this.pick('area', 59, 4),
+      a84bg: selBg(area === 84), a84br: selBr(area === 84), a84c: selC(area === 84), pickA84: () => this.pick('area', 84, 4),
+      a114bg: selBg(area === 114), a114br: selBr(area === 114), a114c: selC(area === 114), pickA114: () => this.pick('area', 114, 4),
+
+      // loan
+      loanEst: (price * 0.4).toFixed(1),
+      lnYbg: selBg(loan === true), lnYbr: selBr(loan === true), lnYc: selC(loan === true),
+      lnNbg: selBg(loan === false), lnNbr: selBr(loan === false), lnNc: selC(loan === false),
+      pickLnY: () => this.pick('loan', true, null),
+      pickLnN: () => this.pick('loan', false, null),
+
+      // report values
+      rHomes, rAtBadge, rMidBadge, rArea, rPrice,
+      cPrice: p,
+      cTotal: this.fmtShort(totalExtra),
+      cTotalBuy: this.fmt(totalBuy),
+      cAtRate: typeof atRate === 'number' ? atRate : atRate,
+      cFtNote,
+      cAt: this.fmtShort(acq),
+      cEdu: this.fmtShort(edu),
+      cAgri: isLargeArea ? this.fmtShort(agri) : '비과세',
+      cReg: this.fmtShort(reg),
+      cBkRate: (bkRate * 100).toFixed(1),
+      cBk: this.fmtShort(bk),
+      cOther: `약 ${Math.round(other / 10000)}만원`,
+      cLoanMax: this.fmt(loanMax),
+      cLtv: '40%',
+      agDot, agDesc, agColor,
+      kobBadge, kobNote,
+
+      // expand toggles
+      togAt: () => this.expand('at'), atD: expanded.at ? 'block' : 'none', atA: expanded.at ? '▲' : '▼',
+      togEt: () => this.expand('et'), etD: expanded.et ? 'block' : 'none', etA: expanded.et ? '▲' : '▼',
+      togAg: () => this.expand('ag'), agD: expanded.ag ? 'block' : 'none', agA: expanded.ag ? '▲' : '▼',
+      togRt: () => this.expand('rt'), rtD: expanded.rt ? 'block' : 'none', rtA: expanded.rt ? '▲' : '▼',
+      togBf: () => this.expand('bf'), bfD: expanded.bf ? 'block' : 'none', bfA: expanded.bf ? '▲' : '▼',
+
+      // actions
+      qsCopyTxt: qsCopied ? '✓ 복사됨' : '복사',
+      reportCopyTxt: reportCopied ? '✓ 복사됨' : '리포트 복사',
+      copyQs: copyQsText,
+      copyReport: copyReportText,
+
+      // newsletter
+      emailVal,
+      onEmail: e => this.setState({ emailVal: e.target.value }),
+      subBtn: subDone ? '✓ 구독완료' : '구독',
+      subscribe: () => {
+        if (emailVal.includes('@')) {
+          this.setState({ subDone: true });
+          setTimeout(() => this.setState({ subDone: false, emailVal: '' }), 3000);
+        }
+      },
+
+      lineChart: this.makeLineChart(),
+      barChart: this.makeBarChart(),
+    };
+  }
+}
+</script>
+</body>
+</html>

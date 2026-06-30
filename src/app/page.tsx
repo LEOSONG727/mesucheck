@@ -1,65 +1,74 @@
-import Image from "next/image";
+import { Calculator, FileText, SearchCheck, ShieldCheck } from "lucide-react";
+import { HeroSearch } from "@/components/HeroSearch";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
-export default function Home() {
+type HomePageProps = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function HomePage({
+  searchParams,
+}: HomePageProps): Promise<React.ReactElement> {
+  const { q = "" } = await searchParams;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <HeroSearch initialQuery={q} />
+      <section className="content-shell grid gap-4 py-6 md:grid-cols-3">
+        <StepCard
+          icon={<SearchCheck size={22} />}
+          title="단지를 검색해요"
+          body="현재는 서울 광진구 자양동 주요 단지를 먼저 지원합니다."
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <StepCard
+          icon={<Calculator size={22} />}
+          title="내 상황을 입력해요"
+          body="보유 주택, 생애최초, 실거주, 대출 계획을 잘 모르겠어요 선택지와 함께 입력합니다."
+        />
+        <StepCard
+          icon={<FileText size={22} />}
+          title="리포트를 확인해요"
+          body="예상 추가 비용, 규제 배지, 근거, 전문가 질문과 면책 문구를 함께 봅니다."
+        />
+      </section>
+      <section className="content-shell py-6">
+        <div className="rounded-2xl border border-success/15 bg-success-soft p-5 md:p-6">
+          <div className="flex gap-3">
+            <ShieldCheck className="mt-0.5 shrink-0 text-success" size={22} />
+            <div>
+              <h2 className="text-base font-black text-success">참고용 정보 안내</h2>
+              <p className="mt-2 text-sm leading-7 text-text-subtle">
+                모든 결과에는 기준일, 근거, 신뢰 라벨, 면책 문구를 포함합니다.
+                초기 데이터는 검토용이며 최종 결정 전에는 세무사·공인중개사·법무사와
+                함께 확인하는 것이 안전합니다.
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+      <section className="content-shell py-6 pb-14">
+        <NewsletterSignup />
+      </section>
+    </>
+  );
+}
+
+function StepCard({
+  icon,
+  title,
+  body,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+}): React.ReactElement {
+  return (
+    <article className="card p-5">
+      <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary-soft text-primary">
+        {icon}
+      </div>
+      <h2 className="text-lg font-black tracking-[-0.03em]">{title}</h2>
+      <p className="mt-2 text-sm leading-7 text-text-subtle">{body}</p>
+    </article>
   );
 }

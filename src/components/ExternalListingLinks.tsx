@@ -3,6 +3,7 @@ import type { ExternalLinks } from "@/types/maesucheck";
 
 type ExternalListingLinksProps = {
   links: ExternalLinks;
+  showIntro?: boolean;
 };
 
 const items = [
@@ -28,16 +29,21 @@ const items = [
 
 export function ExternalListingLinks({
   links,
+  showIntro = true,
 }: ExternalListingLinksProps): React.ReactElement {
   return (
     <section>
-      <div className="mb-2 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
-        실제 매물은 익숙한 서비스에서 확인하세요
-      </div>
-      <p className="mb-3 text-sm leading-6 text-text-subtle">
-        이 리포트는 매수 판단을 돕는 참고 자료입니다. 실제 호가와 매물 상태는
-        외부 서비스에서 함께 확인하세요.
-      </p>
+      {showIntro ? (
+        <>
+          <div className="mb-2 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+            실제 매물은 익숙한 서비스에서 확인하세요
+          </div>
+          <p className="mb-3 text-sm leading-6 text-text-subtle">
+            이 리포트는 매수 판단을 돕는 참고 자료입니다. 실제 호가와 매물 상태는
+            외부 서비스에서 함께 확인하세요.
+          </p>
+        </>
+      ) : null}
       <div className="grid gap-2">
         {items.map((item) => {
           const href = links[item.key];

@@ -1,5 +1,7 @@
-import { CostBreakdown } from "@/components/CostBreakdown";
+import { ExternalLink } from "lucide-react";
+import { CollapsibleSection } from "@/components/CollapsibleSection";
 import { ConfidenceLabel } from "@/components/ConfidenceLabel";
+import { CostBreakdown } from "@/components/CostBreakdown";
 import { DisclaimerFooter } from "@/components/DisclaimerFooter";
 import { ExpertQuestionList } from "@/components/ExpertQuestionList";
 import { ExternalListingLinks } from "@/components/ExternalListingLinks";
@@ -9,7 +11,14 @@ import { ReportHero } from "@/components/ReportHero";
 import { RiskBadge } from "@/components/RiskBadge";
 import { WatchlistCTA } from "@/components/WatchlistCTA";
 import { buildMockReport, getComplexById } from "@/data/mock-data";
-import type { BuyerConditions, ConfidenceLabel as ConfidenceLabelType, TriState } from "@/types/maesucheck";
+import { formatKRWShort } from "@/lib/formatters";
+import type {
+  BuyerConditions,
+  CheckCard,
+  ConfidenceLabel as ConfidenceLabelType,
+  RiskBadgeItem,
+  TriState,
+} from "@/types/maesucheck";
 
 type ReportPageProps = {
   params: Promise<{ id: string }>;
@@ -23,49 +32,118 @@ export default async function ReportPage({
   const conditions = parseConditions(sp);
   const report = buildMockReport(conditions);
   const complex = getComplexById(report.input.complexId);
+  const naverLink = report.externalLinks.naverLand ?? "https://m.land.naver.com";
 
   return (
     <section className="content-shell grid gap-5 py-7">
       <ReportHero report={report} />
-      <div className="grid gap-5 lg:grid-cols-[1fr_340px] lg:items-start">
-        <div className="grid gap-5">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+        <main className="grid gap-5">
+          <RiskFocus items={report.riskBadges.slice(0, 3)} />
           <CostBreakdown report={report} />
 
-          <section>
-            <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
-              적용 가능 규제 배지
+          <CollapsibleSection
+            description="규제, 감면, 대출 관련 항목을 필요할 때 펼쳐서 확인하세요."
+            title="상세 확인 항목"
+          >
+            <div className="grid gap-6">
+              <div>
+                <SectionLabel>적용 가능 규제 배지</SectionLabel>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {report.riskBadges.map((badge) => (
+                    <RiskBadge item={badge} key={badge.label} />
+                  ))}
+                </div>
+              </div>
+              <InfoRows
+                items={report.exemptionChecks.map(toInfoRow)}
+                title="감면·예외 확인 항목"
+              />
+              <InfoRows
+                items={report.loanNotes.map(toInfoRow)}
+                title="대출 관련 주의사항"
+              />
             </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              {report.riskBadges.map((badge) => (
-                <RiskBadge item={badge} key={badge.label} />
-              ))}
-            </div>
-          </section>
+          </CollapsibleSection>
 
-          <CardGroup
-            title="감면·예외 확인 항목"
-            items={report.exemptionChecks}
-          />
-          <CardGroup title="대출 관련 주의사항" items={report.loanNotes} />
-          <CardGroup title="양도세/종부세 참고 개념" items={report.conceptNotes} />
-          <ExpertQuestionList questions={report.expertCheckQuestions} />
-          <ExternalListingLinks links={report.externalLinks} />
-          <ReportActions report={report} />
+          <CollapsibleSection
+            description="정밀 계산이 아닌 참고 개념만 안내합니다."
+            title="양도세/종부세 참고 개념"
+          >
+            <InfoRows items={report.conceptNotes.map(toInfoRow)} />
+          </CollapsibleSection>
+
+          <CollapsibleSection
+            description="세무사, 법무사, 대출 상담사에게 바로 물어볼 수 있게 정리했습니다."
+            title="전문가에게 물어볼 질문"
+          >
+            <ExpertQuestionList
+              questions={report.expertCheckQuestions}
+              showHeader={false}
+            />
+          </CollapsibleSection>
+
+          <CollapsibleSection
+            description="매물 데이터는 저장하지 않고 외부 서비스로 이동합니다."
+            title="외부 매물 확인"
+          >
+            <ExternalListingLinks links={report.externalLinks} showIntro={false} />
+          </CollapsibleSection>
+
           <NewsletterSignup compact />
           <DisclaimerFooter
             basisDate={report.summary.basisDate}
             disclaimer={report.disclaimer}
           />
-        </div>
+        </main>
 
-        <aside className="grid gap-3 lg:sticky lg:top-24">
-          <WatchlistCTA
-            complex={complex}
-            estimatedAdditionalCostKRW={report.summary.estimatedAdditionalCostKRW}
-          />
-          <div className="rounded-2xl border border-[var(--border)] bg-white p-4 text-sm leading-7 text-text-subtle shadow-[var(--shadow-soft)]">
-            공유 링크와 PDF 저장은 준비 중입니다. 지금은 요약 복사와 관심단지
-            저장을 사용할 수 있어요.
+        <aside className="lg:sticky lg:top-24">
+          <div className="grid gap-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-soft)]">
+            <div>
+              <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+                다음 행동
+              </div>
+              <p className="mt-2 text-sm leading-6 text-text-subtle">
+                리포트는 참고용입니다. 실제 매물 확인과 전문가 확인을 분리해서
+                진행하세요.
+              </p>
+            </div>
+
+            <div className="grid gap-2 rounded-xl bg-surface-muted p-3">
+              <MiniMetric
+                label="매매가 외 추가 비용"
+                value={formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
+              />
+              <MiniMetric
+                label="총 예상 매입 비용"
+                value={formatKRWShort(
+                  report.summary.estimatedTotalAcquisitionCostKRW,
+                )}
+              />
+            </div>
+
+            <WatchlistCTA
+              complex={complex}
+              estimatedAdditionalCostKRW={report.summary.estimatedAdditionalCostKRW}
+              mode="report"
+            />
+
+            <a
+              className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-white px-4 text-sm font-extrabold text-text-subtle"
+              href={naverLink}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              실제 매물 확인하기
+              <ExternalLink size={16} />
+            </a>
+
+            <ReportActions report={report} layout="stacked" />
+
+            <p className="rounded-xl bg-success-soft p-3 text-xs leading-6 text-text-subtle">
+              공유 링크와 PDF 저장은 준비 중입니다. 지금은 요약 복사와 관심단지
+              저장을 사용할 수 있어요.
+            </p>
           </div>
         </aside>
       </div>
@@ -73,35 +151,93 @@ export default async function ReportPage({
   );
 }
 
-function CardGroup({
+function RiskFocus({ items }: { items: RiskBadgeItem[] }): React.ReactElement {
+  return (
+    <section>
+      <div className="mb-3 flex items-end justify-between gap-3">
+        <div>
+          <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+            핵심 확인 3개
+          </div>
+          <h2 className="mt-1 text-xl font-black">먼저 볼 항목만 추렸습니다</h2>
+        </div>
+        <span className="hidden text-xs font-bold text-muted sm:block">
+          상세 항목은 아래에서 펼쳐보기
+        </span>
+      </div>
+      <div className="grid gap-3 md:grid-cols-3">
+        {items.map((item) => (
+          <RiskBadge item={item} key={item.label} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type InfoRow = {
+  title: string;
+  body: string;
+  confidenceLabel: ConfidenceLabelType;
+};
+
+function InfoRows({
   title,
   items,
 }: {
-  title: string;
-  items: {
-    title: string;
-    body: string;
-    confidenceLabel: ConfidenceLabelType;
-  }[];
+  title?: string;
+  items: InfoRow[];
 }): React.ReactElement {
   return (
-    <section>
-      <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
-        {title}
-      </div>
-      <div className="grid gap-3 md:grid-cols-2">
+    <div>
+      {title ? <SectionLabel>{title}</SectionLabel> : null}
+      <div className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)]">
         {items.map((item) => (
-          <article className="rounded-2xl border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-soft)]" key={item.title}>
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <h3 className="text-base font-black">{item.title}</h3>
+          <article className="p-4" key={item.title}>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-sm font-black">{item.title}</h3>
               <ConfidenceLabel value={item.confidenceLabel} />
             </div>
             <p className="mt-2 text-sm leading-7 text-text-subtle">{item.body}</p>
           </article>
         ))}
       </div>
-    </section>
+    </div>
   );
+}
+
+function SectionLabel({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement {
+  return (
+    <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+      {children}
+    </div>
+  );
+}
+
+function MiniMetric({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}): React.ReactElement {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-xs font-bold text-muted">{label}</span>
+      <strong className="text-sm text-foreground">{value}</strong>
+    </div>
+  );
+}
+
+function toInfoRow(item: CheckCard): InfoRow {
+  return {
+    title: item.title,
+    body: item.body,
+    confidenceLabel: item.confidenceLabel,
+  };
 }
 
 function parseConditions(

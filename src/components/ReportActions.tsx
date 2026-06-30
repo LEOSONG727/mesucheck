@@ -8,9 +8,13 @@ import type { CostEstimateReport } from "@/types/maesucheck";
 
 type ReportActionsProps = {
   report: CostEstimateReport;
+  layout?: "inline" | "stacked";
 };
 
-export function ReportActions({ report }: ReportActionsProps): React.ReactElement {
+export function ReportActions({
+  report,
+  layout = "inline",
+}: ReportActionsProps): React.ReactElement {
   const { showToast } = useToast();
 
   async function copyFamilySummary(): Promise<void> {
@@ -34,7 +38,13 @@ export function ReportActions({ report }: ReportActionsProps): React.ReactElemen
   }
 
   return (
-    <section className="grid gap-3 sm:grid-cols-[1fr_1.4fr_1fr]">
+    <section
+      className={
+        layout === "stacked"
+          ? "grid gap-2"
+          : "grid gap-3 sm:grid-cols-[1fr_1.4fr_1fr]"
+      }
+    >
       <Link
         className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-white px-4 text-sm font-bold text-text-subtle"
         href={`/estimate?complexId=${report.input.complexId}`}

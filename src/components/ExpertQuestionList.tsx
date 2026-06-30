@@ -5,10 +5,17 @@ import { useToast } from "@/components/ToastProvider";
 
 type ExpertQuestionListProps = {
   questions: string[];
+  showHeader?: boolean;
+};
+
+type QuestionGroup = {
+  title: string;
+  questions: string[];
 };
 
 export function ExpertQuestionList({
   questions,
+  showHeader = true,
 }: ExpertQuestionListProps): React.ReactElement {
   const { showToast } = useToast();
 
@@ -22,40 +29,95 @@ export function ExpertQuestionList({
     showToast("질문을 복사했어요. 중개사나 전문가에게 그대로 물어보세요.");
   }
 
+  async function copyGroup(group: QuestionGroup): Promise<void> {
+    await navigator.clipboard.writeText(group.questions.join("\n"));
+    showToast("질문을 복사했어요. 중개사나 전문가에게 그대로 물어보세요.");
+  }
+
+  const groups = groupQuestions(questions);
+
   return (
     <section>
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div className="text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
-          전문가에게 물어볼 질문
-        </div>
-        <button
-          className="focus-ring rounded-full bg-primary-soft px-3 py-1.5 text-xs font-extrabold text-primary"
-          onClick={copyAll}
-          type="button"
-        >
-          전체 복사
-        </button>
-      </div>
-      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]">
-        {questions.map((question) => (
-          <div
-            className="flex gap-3 border-b border-[var(--border)] p-4 last:border-b-0"
-            key={question}
+      {showHeader ? (
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+            전문가에게 물어볼 질문
+          </div>
+          <button
+            className="focus-ring rounded-full bg-primary-soft px-3 py-1.5 text-xs font-extrabold text-primary"
+            onClick={copyAll}
+            type="button"
           >
-            <p className="min-w-0 flex-1 text-sm leading-7 text-text-subtle">
-              {question}
-            </p>
-            <button
-              className="focus-ring flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary"
-              onClick={() => void copyQuestion(question)}
-              type="button"
-              aria-label="질문 복사"
-            >
-              <Copy size={16} />
-            </button>
+            전체 복사
+          </button>
+        </div>
+      ) : (
+        <div className="mb-3 flex justify-end">
+          <button
+            className="focus-ring rounded-full bg-primary-soft px-3 py-1.5 text-xs font-extrabold text-primary"
+            onClick={copyAll}
+            type="button"
+          >
+            전체 복사
+          </button>
+        </div>
+      )}
+      <div className="grid gap-3">
+        {groups.map((group) => (
+          <div
+            className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]"
+            key={group.title}
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] bg-surface-muted px-4 py-3">
+              <h3 className="text-sm font-black">{group.title}</h3>
+              <button
+                className="focus-ring rounded-full bg-white px-3 py-1.5 text-xs font-extrabold text-primary"
+                onClick={() => void copyGroup(group)}
+                type="button"
+              >
+                그룹 복사
+              </button>
+            </div>
+            {group.questions.map((question) => (
+              <div
+                className="flex gap-3 border-b border-[var(--border)] p-4 last:border-b-0"
+                key={question}
+              >
+                <p className="min-w-0 flex-1 text-sm leading-7 text-text-subtle">
+                  {question}
+                </p>
+                <button
+                  aria-label="질문 복사"
+                  className="focus-ring flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary"
+                  onClick={() => void copyQuestion(question)}
+                  type="button"
+                >
+                  <Copy size={16} />
+                </button>
+              </div>
+            ))}
           </div>
         ))}
       </div>
     </section>
   );
+}
+
+function groupQuestions(questions: string[]): QuestionGroup[] {
+  const tax = questions.filter((question) =>
+    /취득세|생애최초|일시적 2주택|중과/.test(question),
+  );
+  const legal = questions.filter((question) =>
+    /법무사|국민주택채권|공동명의/.test(question),
+  );
+  const loan = questions.filter((question) => /LTV|DSR|대출/.test(question));
+  const used = new Set([...tax, ...legal, ...loan]);
+  const brokerage = questions.filter((question) => !used.has(question));
+
+  return [
+    { title: "세무사에게 물어볼 질문", questions: tax },
+    { title: "법무사에게 물어볼 질문", questions: legal },
+    { title: "대출 상담사에게 물어볼 질문", questions: loan },
+    { title: "중개사에게 물어볼 질문", questions: brokerage },
+  ].filter((group) => group.questions.length > 0);
 }

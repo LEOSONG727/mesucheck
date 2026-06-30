@@ -30,7 +30,7 @@ export function ComplexSummaryCard({
           </div>
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
-              <h1 className="text-3xl font-black tracking-[-0.04em] md:text-4xl">
+              <h1 className="text-3xl font-black md:text-4xl">
                 {complex.name}
               </h1>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -52,7 +52,7 @@ export function ComplexSummaryCard({
             </div>
             {detailed ? (
               <div className="w-full md:w-72">
-                <WatchlistCTA complex={complex} />
+                <WatchlistCTA complex={complex} mode="complex" />
               </div>
             ) : (
               <div className="flex items-center gap-2 text-sm font-extrabold text-primary">
@@ -132,7 +132,7 @@ function MetricCard({
         {icon}
         {label}
       </div>
-      <div className="text-xl font-black tracking-[-0.04em]">{value}</div>
+      <div className="text-xl font-black">{value}</div>
       <div className="mt-2 text-xs font-medium text-muted">{helper}</div>
     </div>
   );

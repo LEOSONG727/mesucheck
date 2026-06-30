@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Search, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronRight, Search, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
-import { ComplexSummaryCard } from "@/components/ComplexSummaryCard";
 import { StateView } from "@/components/StateView";
 import { exampleSearchTerms, searchComplexes } from "@/data/mock-data";
+import { formatKRWShort } from "@/lib/formatters";
+import type { Complex } from "@/types/maesucheck";
 
 type HeroSearchProps = {
   initialQuery?: string;
@@ -27,7 +28,7 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
           <ShieldCheck size={15} />
           매수 전 리스크 체크
         </div>
-        <h1 className="max-w-3xl text-balance text-4xl font-black leading-[1.18] tracking-[-0.055em] text-foreground md:text-6xl">
+        <h1 className="max-w-3xl text-balance text-4xl font-black leading-[1.18] text-foreground md:text-6xl">
           네이버에서 본 그 집,
           <br />
           <span className="text-primary">내 상황으로 사도 괜찮은지</span>
@@ -88,27 +89,55 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
 
         <div className="mt-5">
           {isErrorDemo ? (
-            <StateView
-              state="error"
-              onRetry={() => setQuery("")}
-            />
+            <StateView state="error" onRetry={() => setQuery("")} />
           ) : results.length === 0 ? (
             <StateView state="empty" />
           ) : (
-            <div className="grid gap-3">
+            <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
               {results.slice(0, 3).map((complex) => (
-                <Link
-                  className="focus-ring rounded-2xl transition hover:-translate-y-0.5"
-                  href={`/complexes/${complex.id}`}
-                  key={complex.id}
-                >
-                  <ComplexSummaryCard complex={complex} />
-                </Link>
+                <ComplexSearchResultRow complex={complex} key={complex.id} />
               ))}
             </div>
           )}
         </div>
       </div>
     </section>
+  );
+}
+
+function ComplexSearchResultRow({
+  complex,
+}: {
+  complex: Complex;
+}): React.ReactElement {
+  return (
+    <Link
+      className="focus-ring flex min-h-[88px] items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-3 last:border-b-0 hover:bg-surface-muted"
+      href={`/complexes/${complex.id}`}
+    >
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-base font-black">
+          {complex.name}
+        </span>
+        <span className="mt-1 block truncate text-xs font-medium text-muted">
+          서울 광진구 {complex.dong} · {complex.builtYear}년 ·{" "}
+          {complex.householdCount.toLocaleString("ko-KR")}세대
+        </span>
+        <span className="mt-2 flex flex-wrap gap-1.5">
+          {complex.zoneLabels.slice(0, 1).map((label) => (
+            <span
+              className="rounded-full bg-warning-soft px-2 py-1 text-[11px] font-extrabold text-warning"
+              key={label}
+            >
+              {label}
+            </span>
+          ))}
+          <span className="rounded-full bg-primary-soft px-2 py-1 text-[11px] font-extrabold text-primary">
+            최근 {formatKRWShort(complex.recentDealKRW)}
+          </span>
+        </span>
+      </span>
+      <ChevronRight className="shrink-0 text-muted" size={18} />
+    </Link>
   );
 }

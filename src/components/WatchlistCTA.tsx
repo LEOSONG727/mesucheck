@@ -15,11 +15,13 @@ import type { Complex, WatchlistItem } from "@/types/maesucheck";
 type WatchlistCTAProps = {
   complex: Complex;
   estimatedAdditionalCostKRW?: number;
+  mode?: "complex" | "report";
 };
 
 export function WatchlistCTA({
   complex,
   estimatedAdditionalCostKRW,
+  mode = "complex",
 }: WatchlistCTAProps): React.ReactElement {
   const watchlistSnapshot = useSyncExternalStore(
     subscribeWatchlist,
@@ -51,8 +53,14 @@ export function WatchlistCTA({
       nextItem,
       ...items.filter((item) => item.complexId !== complex.id),
     ]);
-    showToast("관심단지에 저장했어요. 다음에 다시 계산하기 쉽게 보관됩니다.");
+    showToast("관심단지에 저장했어요. 다음에 다시 확인하기 쉽게 보관됩니다.");
   }
+
+  const label = saved
+    ? "관심단지에 저장됨"
+    : mode === "report"
+      ? "이 조건으로 관심단지 저장하기"
+      : "이 단지 저장하고 나중에 다시 보기";
 
   return (
     <button
@@ -65,7 +73,7 @@ export function WatchlistCTA({
       type="button"
     >
       <Bookmark size={17} fill={saved ? "currentColor" : "none"} />
-      {saved ? "관심단지에 저장됨" : "이 단지 저장하고 변화 알림 받기"}
+      {label}
     </button>
   );
 }

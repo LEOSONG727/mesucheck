@@ -1,18 +1,22 @@
 "use client";
 
+import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ConditionSummary } from "@/components/ConditionSummary";
 import { loadingMessages } from "@/data/mock-data";
-import { formatKRWShort } from "@/lib/formatters";
+import { formatAreaM2, formatKRWShort } from "@/lib/formatters";
 import type { BuyerConditions, Complex, TriState } from "@/types/maesucheck";
 
 type ConditionFormProps = {
   complex: Complex;
 };
 
+const reviewStep = 8;
+
 export function ConditionForm({ complex }: ConditionFormProps): React.ReactElement {
   const router = useRouter();
+  const [step, setStep] = useState(0);
   const [conditions, setConditions] = useState<BuyerConditions>({
     complexId: complex.id,
     priceKRW: complex.recentDealKRW,
@@ -34,7 +38,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
 
     const interval = setInterval(() => {
       setLoadingIndex((index) => (index + 1) % loadingMessages.length);
-    }, 560);
+    }, 420);
 
     return () => clearInterval(interval);
   }, [loading]);
@@ -43,8 +47,15 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
     setConditions((current) => ({ ...current, ...next }));
   }
 
-  function submit(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+  function goNext(): void {
+    setStep((current) => Math.min(current + 1, reviewStep));
+  }
+
+  function goBack(): void {
+    setStep((current) => Math.max(current - 1, 0));
+  }
+
+  function submit(): void {
     setLoading(true);
     window.localStorage.setItem(
       "maesucheck.lastConditions",
@@ -56,37 +67,22 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
       price: String(conditions.priceKRW),
       area: String(conditions.areaM2),
       home: String(conditions.homeCountAfterPurchase),
-      first:
-        conditions.isFirstHomeBuyer === "unknown"
-          ? "unknown"
-          : conditions.isFirstHomeBuyer
-            ? "yes"
-            : "no",
-      live:
-        conditions.isActualResidence === "unknown"
-          ? "unknown"
-          : conditions.isActualResidence
-            ? "yes"
-            : "no",
-      loan:
-        conditions.willUseLoan === "unknown"
-          ? "unknown"
-          : conditions.willUseLoan
-            ? "yes"
-            : "no",
+      first: toQueryValue(conditions.isFirstHomeBuyer),
+      live: toQueryValue(conditions.isActualResidence),
+      loan: toQueryValue(conditions.willUseLoan),
       temp: conditions.isTemporaryTwoHome,
       dispose: conditions.willDisposeExistingHome,
     });
 
     window.setTimeout(() => {
       router.push(`/reports/demo?${params.toString()}`);
-    }, 2200);
+    }, 1200);
   }
 
   if (loading) {
     return (
-      <section className="mobile-frame px-4 py-8">
-        <div className="card p-5">
+      <section className="content-shell grid min-h-[520px] place-items-center py-8">
+        <div className="w-full max-w-xl rounded-2xl border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-lifted)]">
           <div className="mb-4 flex items-center gap-3">
             <span className="size-2 rounded-full bg-accent" />
             <span className="text-sm font-extrabold text-text-subtle">
@@ -95,7 +91,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-surface-muted">
             <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
+              className="h-full rounded-full bg-primary transition-all duration-300"
               style={{ width: `${(loadingIndex + 1) * 25}%` }}
             />
           </div>
@@ -105,44 +101,113 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
               <div className="skeleton h-24" />
               <div className="skeleton h-24" />
             </div>
-            <div className="skeleton h-32" />
           </div>
         </div>
       </section>
     );
   }
 
-  return (
-    <form className="mobile-frame grid gap-5 px-4 py-7" onSubmit={submit}>
-      <div className="sticky top-[68px] z-20 -mx-4 border-b border-[var(--border)] bg-white/94 px-4 py-4 backdrop-blur-xl">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div>
-            <div className="text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
-              조건 입력
-            </div>
-            <h1 className="mt-1 text-xl font-black tracking-[-0.03em]">
-              내 상황을 알려주세요
-            </h1>
-          </div>
-          <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-extrabold text-primary">
-            기준일 2026.06.30
-          </span>
-        </div>
-        <ConditionSummary complex={complex} conditions={conditions} />
-      </div>
+  const progressStep = Math.min(step + 1, reviewStep + 1);
+  const progressPercent = (progressStep / (reviewStep + 1)) * 100;
 
-      <Question title="매수 예상가가 얼마인가요?" helper="mock 리포트는 입력 가격을 요약에 반영합니다.">
-        <div className="rounded-2xl border border-[var(--border)] bg-white p-5 text-center">
+  return (
+    <section className="content-shell grid gap-6 py-6 lg:grid-cols-[minmax(0,640px)_360px] lg:items-start">
+      <form
+        className="grid min-h-[calc(100vh-128px)] gap-5 lg:min-h-0"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (step === reviewStep) {
+            submit();
+            return;
+          }
+          goNext();
+        }}
+      >
+        <div className="sticky top-[68px] z-20 -mx-4 border-b border-[var(--border)] bg-white/95 px-4 py-4 backdrop-blur-xl sm:mx-0 sm:rounded-2xl sm:border">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+                조건 입력
+              </div>
+              <h1 className="mt-1 text-xl font-black">
+                {step === reviewStep ? "입력 조건을 확인하세요" : "한 가지씩 확인합니다"}
+              </h1>
+            </div>
+            <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-extrabold text-primary">
+              {progressStep} / {reviewStep + 1}
+            </span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-surface-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="card p-5 md:p-7">{renderStepContent(step, conditions, updateCondition, complex)}</div>
+
+        <div className="sticky bottom-4 z-20 grid grid-cols-[auto_1fr] gap-3">
+          <button
+            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[var(--border-strong)] bg-white px-5 text-sm font-extrabold text-text-subtle disabled:opacity-40"
+            disabled={step === 0}
+            onClick={goBack}
+            type="button"
+          >
+            <ArrowLeft size={17} />
+            이전
+          </button>
+          <button
+            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-accent px-5 text-base font-black text-white shadow-[var(--shadow-lifted)]"
+            type="submit"
+          >
+            {step === reviewStep ? "비용·리스크 리포트 보기" : "다음"}
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      </form>
+
+      <aside className="hidden lg:sticky lg:top-24 lg:grid lg:gap-3">
+        <div className="card p-5">
+          <div className="mb-3 text-xs font-extrabold tracking-[0.08em] text-muted">
+            현재 조건
+          </div>
+          <ConditionSummary complex={complex} conditions={conditions} />
+        </div>
+        <div className="rounded-2xl border border-success/15 bg-success-soft p-5 text-sm leading-7 text-text-subtle">
+          모르는 항목은 그대로 선택해도 됩니다. 리포트에서는 해당 항목을 별도
+          확인 또는 전문가 확인 필요로 표시합니다.
+        </div>
+      </aside>
+    </section>
+  );
+}
+
+function renderStepContent(
+  step: number,
+  conditions: BuyerConditions,
+  updateCondition: (next: Partial<BuyerConditions>) => void,
+  complex: Complex,
+): React.ReactElement {
+  if (step === 0) {
+    return (
+      <Question
+        helper="호가가 아니라 실제 검토 중인 예상 매수가를 넣어주세요."
+        title="매수 예상가가 얼마인가요?"
+      >
+        <div className="rounded-2xl border border-[var(--border)] bg-surface-muted p-5 text-center">
           <label className="mb-2 block text-xs font-bold text-muted" htmlFor="price">
             억 원 단위
           </label>
           <input
-            className="focus-ring w-40 rounded-xl bg-primary-soft px-3 py-2 text-right text-5xl font-black tracking-[-0.05em] text-primary outline-none"
+            className="focus-ring w-40 rounded-xl bg-white px-3 py-2 text-right text-5xl font-black text-primary outline-none"
             id="price"
             max={200}
             min={1}
             onChange={(event) =>
-              updateCondition({ priceKRW: Number(event.target.value) * 100_000_000 })
+              updateCondition({
+                priceKRW: Number(event.target.value) * 100_000_000,
+              })
             }
             step={0.1}
             type="number"
@@ -154,14 +219,21 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           </div>
         </div>
       </Question>
+    );
+  }
 
-      <Question title="어떤 면적 타입을 생각하고 계세요?" helper="85㎡ 초과 여부는 별도 확인 항목에 영향을 줄 수 있어요.">
+  if (step === 1) {
+    return (
+      <Question
+        helper="85㎡ 초과 여부는 세금 항목에서 별도 확인 대상으로 표시될 수 있습니다."
+        title="어떤 면적 타입을 생각하고 계세요?"
+      >
         <div className="grid gap-2">
           {[59, 84.9, 114].map((area) => (
             <ChoiceButton
               active={conditions.areaM2 === area}
               key={area}
-              label={`${area}㎡`}
+              label={`${formatAreaM2(area)}`}
               onClick={() => updateCondition({ areaM2: area })}
               subLabel={
                 area > 85
@@ -172,30 +244,38 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           ))}
         </div>
       </Question>
+    );
+  }
 
-      <Question title="현재 보유 주택은 몇 채인가요?" helper="본인·배우자 합산 기준으로 생각해 주세요.">
+  if (step === 2) {
+    return (
+      <Question title="현재 보유 주택은 몇 채인가요?" helper="본인·배우자 합산 기준입니다.">
         <div className="grid gap-2">
           <ChoiceButton
             active={conditions.homeCountAfterPurchase === 1}
             label="없음 · 이 집이 첫 주택이에요"
             onClick={() => updateCondition({ homeCountAfterPurchase: 1 })}
-            subLabel="무주택 또는 1주택 기준으로 리포트에 표시돼요"
+            subLabel="1주택 기준으로 표시됩니다"
           />
           <ChoiceButton
             active={conditions.homeCountAfterPurchase === 2}
             label="1채 · 갈아타기 가능성이 있어요"
             onClick={() => updateCondition({ homeCountAfterPurchase: 2 })}
-            subLabel="일시적 2주택 예외 확인 항목으로 표시돼요"
+            subLabel="일시적 2주택 예외 확인 항목으로 표시됩니다"
           />
           <ChoiceButton
             active={conditions.homeCountAfterPurchase === "unknown"}
             label="잘 모르겠어요"
             onClick={() => updateCondition({ homeCountAfterPurchase: "unknown" })}
-            subLabel="리포트에서 별도 확인으로 표시돼요"
+            subLabel="리포트에서 별도 확인으로 표시됩니다"
           />
         </div>
       </Question>
+    );
+  }
 
+  if (step === 3) {
+    return (
       <Question title="생애최초 주택 구입 조건에 해당하나요?">
         <TriStateChoices
           onChange={(value) =>
@@ -204,23 +284,25 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
                 value === "unknown" ? "unknown" : value === "yes",
             })
           }
-          value={
-            conditions.isFirstHomeBuyer === "unknown"
-              ? "unknown"
-              : conditions.isFirstHomeBuyer
-                ? "yes"
-                : "no"
-          }
+          value={fromBooleanUnknown(conditions.isFirstHomeBuyer)}
         />
       </Question>
+    );
+  }
 
+  if (step === 4) {
+    return (
       <Question title="일시적 2주택 가능성이 있나요?">
         <TriStateChoices
           onChange={(value) => updateCondition({ isTemporaryTwoHome: value })}
           value={conditions.isTemporaryTwoHome}
         />
       </Question>
+    );
+  }
 
+  if (step === 5) {
+    return (
       <Question title="이 집에 직접 들어가 살 예정인가요?">
         <TriStateChoices
           onChange={(value) =>
@@ -229,16 +311,14 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
                 value === "unknown" ? "unknown" : value === "yes",
             })
           }
-          value={
-            conditions.isActualResidence === "unknown"
-              ? "unknown"
-              : conditions.isActualResidence
-                ? "yes"
-                : "no"
-          }
+          value={fromBooleanUnknown(conditions.isActualResidence)}
         />
       </Question>
+    );
+  }
 
+  if (step === 6) {
+    return (
       <Question title="대출을 받을 계획이 있나요?">
         <TriStateChoices
           onChange={(value) =>
@@ -246,30 +326,52 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
               willUseLoan: value === "unknown" ? "unknown" : value === "yes",
             })
           }
-          value={
-            conditions.willUseLoan === "unknown"
-              ? "unknown"
-              : conditions.willUseLoan
-                ? "yes"
-                : "no"
-          }
+          value={fromBooleanUnknown(conditions.willUseLoan)}
         />
       </Question>
+    );
+  }
 
+  if (step === 7) {
+    return (
       <Question title="기존 주택을 처분할 예정인가요?">
         <TriStateChoices
           onChange={(value) => updateCondition({ willDisposeExistingHome: value })}
           value={conditions.willDisposeExistingHome}
         />
       </Question>
+    );
+  }
 
-      <button
-        className="focus-ring sticky bottom-4 min-h-14 rounded-2xl bg-accent px-5 text-base font-black text-white shadow-[var(--shadow-lifted)]"
-        type="submit"
-      >
-        비용·리스크 리포트 보기
-      </button>
-    </form>
+  return (
+    <Question
+      helper="아래 조건 기준으로 참고 리포트를 만듭니다. 모르는 항목은 별도 확인으로 표시됩니다."
+      title="입력한 조건을 확인하세요"
+    >
+      <div className="mb-5 rounded-2xl border border-[var(--border)] bg-surface-muted p-4">
+        <ConditionSummary complex={complex} conditions={conditions} />
+      </div>
+      <div className="grid gap-3 text-sm leading-7 text-text-subtle">
+        <ReviewRow label="단지" value={complex.name} />
+        <ReviewRow label="매수가" value={formatKRWShort(conditions.priceKRW)} />
+        <ReviewRow label="면적" value={formatAreaM2(conditions.areaM2)} />
+        <ReviewRow
+          label="보유 주택"
+          value={
+            conditions.homeCountAfterPurchase === "unknown"
+              ? "잘 모르겠어요"
+              : `${conditions.homeCountAfterPurchase}주택 기준`
+          }
+        />
+      </div>
+      <div className="mt-5 flex items-start gap-3 rounded-2xl bg-success-soft p-4 text-sm leading-7 text-text-subtle">
+        <CheckCircle2 className="mt-0.5 shrink-0 text-success" size={18} />
+        <p>
+          결과는 입력 조건 기준의 참고 리포트입니다. 실제 세금과 규제 적용은
+          세부 조건에 따라 달라질 수 있습니다.
+        </p>
+      </div>
+    </Question>
   );
 }
 
@@ -283,12 +385,14 @@ function Question({
   children: React.ReactNode;
 }): React.ReactElement {
   return (
-    <section className="card p-5">
-      <h2 className="text-2xl font-black leading-tight tracking-[-0.04em]">
+    <section>
+      <h2 className="text-3xl font-black leading-tight md:text-4xl">
         {title}
       </h2>
-      {helper ? <p className="mt-2 text-sm leading-6 text-text-subtle">{helper}</p> : null}
-      <div className="mt-5">{children}</div>
+      {helper ? (
+        <p className="mt-3 max-w-lg text-sm leading-7 text-text-subtle">{helper}</p>
+      ) : null}
+      <div className="mt-7">{children}</div>
     </section>
   );
 }
@@ -316,7 +420,9 @@ function ChoiceButton({
     >
       <span className="block text-base font-black">{label}</span>
       {subLabel ? (
-        <span className="mt-1 block text-sm leading-6 text-text-subtle">{subLabel}</span>
+        <span className="mt-1 block text-sm leading-6 text-text-subtle">
+          {subLabel}
+        </span>
       ) : null}
     </button>
   );
@@ -331,22 +437,45 @@ function TriStateChoices({
 }): React.ReactElement {
   return (
     <div className="grid gap-2">
-      <ChoiceButton
-        active={value === "yes"}
-        label="네"
-        onClick={() => onChange("yes")}
-      />
-      <ChoiceButton
-        active={value === "no"}
-        label="아니요"
-        onClick={() => onChange("no")}
-      />
+      <ChoiceButton active={value === "yes"} label="네" onClick={() => onChange("yes")} />
+      <ChoiceButton active={value === "no"} label="아니요" onClick={() => onChange("no")} />
       <ChoiceButton
         active={value === "unknown"}
         label="잘 모르겠어요"
         onClick={() => onChange("unknown")}
-        subLabel="리포트에서 별도 확인 또는 전문가 확인 필요로 표시돼요"
+        subLabel="리포트에서 별도 확인 또는 전문가 확인 필요로 표시됩니다"
       />
     </div>
   );
+}
+
+function ReviewRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}): React.ReactElement {
+  return (
+    <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] pb-3 last:border-b-0 last:pb-0">
+      <span className="font-bold text-muted">{label}</span>
+      <span className="text-right font-black text-foreground">{value}</span>
+    </div>
+  );
+}
+
+function fromBooleanUnknown(value: boolean | "unknown"): TriState {
+  if (value === "unknown") {
+    return "unknown";
+  }
+
+  return value ? "yes" : "no";
+}
+
+function toQueryValue(value: boolean | "unknown"): string {
+  if (value === "unknown") {
+    return "unknown";
+  }
+
+  return value ? "yes" : "no";
 }

@@ -1,4 +1,3 @@
-import { ConfidenceLabel } from "@/components/ConfidenceLabel";
 import { formatKRWShort, getBasisDateLabel } from "@/lib/formatters";
 import type { CostEstimateReport } from "@/types/maesucheck";
 
@@ -10,7 +9,7 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
   return (
     <section className="overflow-hidden rounded-[22px] bg-primary-strong p-6 text-white shadow-[var(--shadow-lifted)] md:p-8">
       <div className="mb-5 flex flex-wrap gap-2">
-        {report.conditionSummary.map((item) => (
+        {report.conditionSummary.slice(0, 4).map((item) => (
           <span
             className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/78"
             key={item}
@@ -20,7 +19,7 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
         ))}
       </div>
       <p className="text-sm font-semibold text-white/55">매매가 외 예상 추가 비용</p>
-      <div className="mt-2 text-6xl font-black tracking-[-0.07em] md:text-7xl">
+      <div className="mt-2 text-6xl font-black md:text-7xl">
         {formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
       </div>
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -44,14 +43,8 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
         </strong>
         이 추가로 필요할 수 있어요.
       </p>
-      <div className="mt-5 flex flex-wrap items-center gap-2">
-        <ConfidenceLabel value="rule_based" />
-        <ConfidenceLabel value="variable" />
-        <ConfidenceLabel value="needs_expert_check" />
-        <ConfidenceLabel value="concept_only" />
-        <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/55">
-          {getBasisDateLabel(report.summary.basisDate)}
-        </span>
+      <div className="mt-5 inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/60">
+        {getBasisDateLabel(report.summary.basisDate)}
       </div>
     </section>
   );

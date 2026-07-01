@@ -34,7 +34,7 @@ export default function RootLayout({
         <ToastProvider>
           <div className="app-shell">
             <Header />
-            <main className="pb-14 pt-[68px]">{children}</main>
+            <main className="pb-14 pt-[86px]">{children}</main>
           </div>
         </ToastProvider>
       </body>

@@ -14,7 +14,7 @@ export default async function HomePage({
   return (
     <>
       <HeroSearch initialQuery={q} />
-      <section className="content-shell grid gap-4 py-6 md:grid-cols-3">
+      <section className="content-shell grid-flow-dense grid gap-4 py-8 md:grid-cols-3">
         <StepCard
           icon={<SearchCheck size={22} />}
           title="단지를 검색해요"
@@ -31,8 +31,8 @@ export default async function HomePage({
           body="예상 추가 비용, 규제 배지, 근거, 전문가 질문과 면책 문구를 함께 봅니다."
         />
       </section>
-      <section className="content-shell py-6">
-        <div className="rounded-2xl border border-success/15 bg-success-soft p-5 md:p-6">
+      <section className="content-shell py-4">
+        <div className="glass-panel rounded-[24px] p-5 md:p-6">
           <div className="flex gap-3">
             <ShieldCheck className="mt-0.5 shrink-0 text-success" size={22} />
             <div>
@@ -63,11 +63,11 @@ function StepCard({
   body: string;
 }): React.ReactElement {
   return (
-    <article className="card p-5">
-      <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary-soft text-primary">
+    <article className="premium-panel interactive-lift rounded-[24px] p-5">
+      <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary shadow-[var(--shadow-crisp)]">
         {icon}
       </div>
-      <h2 className="text-lg font-black tracking-[-0.03em]">{title}</h2>
+      <h2 className="text-lg font-black">{title}</h2>
       <p className="mt-2 text-sm leading-7 text-text-subtle">{body}</p>
     </article>
   );

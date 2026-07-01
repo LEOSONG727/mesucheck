@@ -36,7 +36,7 @@ export function WatchlistPageClient(): React.ReactElement {
   return (
     <section className="content-shell py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-black tracking-[-0.04em]">관심단지</h1>
+        <h1 className="text-3xl font-black">관심단지</h1>
         <p className="mt-2 text-sm leading-6 text-text-subtle">
           저장한 단지의 최근 실거래, 예상 비용, 규제 변경을 다시 확인하기 쉽게
           보관합니다.
@@ -48,7 +48,7 @@ export function WatchlistPageClient(): React.ReactElement {
             <div className="border-b border-[var(--border)] p-5">
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-black tracking-[-0.03em]">
+                  <h2 className="text-xl font-black">
                     {item.complexName}
                   </h2>
                   <p className="mt-1 text-sm text-muted">서울 광진구 {item.dong}</p>

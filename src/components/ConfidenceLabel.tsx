@@ -33,7 +33,7 @@ export function ConfidenceLabel({
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-extrabold ${label.className}`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-extrabold shadow-[var(--shadow-crisp)] ${label.className}`}
     >
       {label.text}
     </span>

@@ -9,7 +9,7 @@ export default function NewsletterPage(): React.ReactElement {
         <div className="mb-4 inline-flex rounded-full bg-primary-soft px-4 py-2 text-sm font-extrabold text-primary">
           월간 매수체크
         </div>
-        <h1 className="text-balance text-4xl font-black leading-tight tracking-[-0.05em] md:text-5xl">
+        <h1 className="text-balance text-4xl font-black leading-tight md:text-5xl">
           자양동 실거래 변화와 세금·규제 체크포인트를 쉽게 받아보세요
         </h1>
         <p className="mt-4 text-base leading-8 text-text-subtle">

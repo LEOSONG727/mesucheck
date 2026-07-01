@@ -1,27 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f3ef;
-  --foreground: #18181e;
+  --background: #f7f7f2;
+  --foreground: #15171f;
   --surface: #ffffff;
-  --surface-muted: #f8f7f4;
-  --primary: #1b3a6b;
-  --primary-strong: #142d54;
-  --primary-soft: #eef3fd;
-  --accent: #e05534;
-  --accent-soft: #fef3ef;
-  --success: #1b7a50;
-  --success-soft: #ebf8f3;
-  --warning: #b35108;
-  --warning-soft: #fff8eb;
-  --info: #2563eb;
+  --surface-muted: #f3f4f0;
+  --surface-strong: #eef0eb;
+  --primary: #17324d;
+  --primary-strong: #101f32;
+  --primary-soft: #eaf1f7;
+  --accent: #bf6048;
+  --accent-soft: #fbefe9;
+  --success: #176a58;
+  --success-soft: #e8f5f0;
+  --warning: #a86113;
+  --warning-soft: #fff5e5;
+  --info: #3558a8;
   --info-soft: #eef3ff;
-  --muted: #8e8e96;
-  --text-subtle: #4e4e68;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.18);
-  --shadow-soft: 0 1px 14px rgba(0, 0, 0, 0.06);
-  --shadow-lifted: 0 4px 28px rgba(0, 0, 0, 0.11);
+  --muted: #7b818e;
+  --text-subtle: #505a6b;
+  --border: rgba(21, 23, 31, 0.08);
+  --border-strong: rgba(21, 23, 31, 0.18);
+  --shadow-soft: 0 1px 2px rgba(16, 31, 50, 0.04), 0 18px 44px rgba(16, 31, 50, 0.06);
+  --shadow-lifted: 0 10px 28px rgba(16, 31, 50, 0.10), 0 30px 80px rgba(16, 31, 50, 0.10);
+  --shadow-crisp: 0 1px 0 rgba(255, 255, 255, 0.75) inset, 0 1px 2px rgba(16, 31, 50, 0.08);
 }
 
 @theme inline {
@@ -29,6 +31,7 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
+  --color-surface-strong: var(--surface-strong);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
   --color-primary-soft: var(--primary-soft);
@@ -59,7 +62,7 @@ html {
 body {
   min-height: 100%;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(244, 243, 239, 0)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 247, 242, 0)),
     var(--background);
   color: var(--foreground);
   font-family: "Geist", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic",
@@ -97,12 +100,16 @@ input[type="number"]::-webkit-outer-spin-button {
 .app-shell {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(238, 243, 253, 0.92), transparent 32rem),
+    linear-gradient(115deg, rgba(234, 241, 247, 0.95) 0%, transparent 34rem),
+    linear-gradient(245deg, rgba(232, 245, 240, 0.75) 0%, transparent 30rem),
+    linear-gradient(rgba(21, 23, 31, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 23, 31, 0.024) 1px, transparent 1px),
     var(--background);
+  background-size: auto, auto, 56px 56px, 56px 56px, auto;
 }
 
 .content-shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -114,10 +121,42 @@ input[type="number"]::-webkit-outer-spin-button {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: var(--shadow-soft);
 }
 
+
+.premium-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72)),
+    var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: var(--shadow-lifted);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.interactive-lift {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.interactive-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lifted);
+}
+
+.hairline-top {
+  box-shadow: var(--shadow-crisp);
+}
 .focus-ring {
   outline: 2px solid transparent;
   outline-offset: 3px;

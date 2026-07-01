@@ -82,7 +82,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
   if (loading) {
     return (
       <section className="content-shell grid min-h-[520px] place-items-center py-8">
-        <div className="w-full max-w-xl rounded-2xl border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-lifted)]">
+        <div className="premium-panel w-full max-w-xl rounded-[28px] p-5">
           <div className="mb-4 flex items-center gap-3">
             <span className="size-2 rounded-full bg-accent" />
             <span className="text-sm font-extrabold text-text-subtle">
@@ -111,7 +111,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
   const progressPercent = (progressStep / (reviewStep + 1)) * 100;
 
   return (
-    <section className="content-shell grid gap-6 py-6 lg:grid-cols-[minmax(0,640px)_360px] lg:items-start">
+    <section className="content-shell grid gap-6 py-8 lg:grid-cols-[minmax(0,700px)_360px] lg:items-start">
       <form
         className="grid min-h-[calc(100vh-128px)] gap-5 lg:min-h-0"
         onSubmit={(event) => {
@@ -123,10 +123,10 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           goNext();
         }}
       >
-        <div className="sticky top-[68px] z-20 -mx-4 border-b border-[var(--border)] bg-white/95 px-4 py-4 backdrop-blur-xl sm:mx-0 sm:rounded-2xl sm:border">
+        <div className="glass-panel sticky top-[78px] z-20 -mx-4 rounded-none border-x-0 px-4 py-4 sm:mx-0 sm:rounded-[24px] sm:border">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
-              <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+              <div className="text-xs font-extrabold text-muted">
                 조건 입력
               </div>
               <h1 className="mt-1 text-xl font-black">
@@ -145,11 +145,11 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           </div>
         </div>
 
-        <div className="card p-5 md:p-7">{renderStepContent(step, conditions, updateCondition, complex)}</div>
+        <div className="premium-panel rounded-[28px] p-5 md:p-7">{renderStepContent(step, conditions, updateCondition, complex)}</div>
 
         <div className="sticky bottom-4 z-20 grid grid-cols-[auto_1fr] gap-3">
           <button
-            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[var(--border-strong)] bg-white px-5 text-sm font-extrabold text-text-subtle disabled:opacity-40"
+            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[var(--border-strong)] bg-white/88 px-5 shadow-[var(--shadow-crisp)] text-sm font-extrabold text-text-subtle disabled:opacity-40"
             disabled={step === 0}
             onClick={goBack}
             type="button"
@@ -158,7 +158,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
             이전
           </button>
           <button
-            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-accent px-5 text-base font-black text-white shadow-[var(--shadow-lifted)]"
+            className="focus-ring flex min-h-14 items-center justify-center gap-2 interactive-lift rounded-2xl bg-accent px-5 text-base font-black text-white shadow-[var(--shadow-lifted)]"
             type="submit"
           >
             {step === reviewStep ? "비용·리스크 리포트 보기" : "다음"}
@@ -168,13 +168,13 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
       </form>
 
       <aside className="hidden lg:sticky lg:top-24 lg:grid lg:gap-3">
-        <div className="card p-5">
-          <div className="mb-3 text-xs font-extrabold tracking-[0.08em] text-muted">
+        <div className="premium-panel rounded-[24px] p-5">
+          <div className="mb-3 text-xs font-extrabold text-muted">
             현재 조건
           </div>
           <ConditionSummary complex={complex} conditions={conditions} />
         </div>
-        <div className="rounded-2xl border border-success/15 bg-success-soft p-5 text-sm leading-7 text-text-subtle">
+        <div className="glass-panel rounded-[24px] p-5 text-sm leading-7 text-text-subtle">
           모르는 항목은 그대로 선택해도 됩니다. 리포트에서는 해당 항목을 별도
           확인 또는 전문가 확인 필요로 표시합니다.
         </div>
@@ -195,12 +195,12 @@ function renderStepContent(
         helper="호가가 아니라 실제 검토 중인 예상 매수가를 넣어주세요."
         title="매수 예상가가 얼마인가요?"
       >
-        <div className="rounded-2xl border border-[var(--border)] bg-surface-muted p-5 text-center">
+        <div className="rounded-[24px] border border-[var(--border)] bg-surface-muted p-5 text-center shadow-[var(--shadow-crisp)]">
           <label className="mb-2 block text-xs font-bold text-muted" htmlFor="price">
             억 원 단위
           </label>
           <input
-            className="focus-ring w-40 rounded-xl bg-white px-3 py-2 text-right text-5xl font-black text-primary outline-none"
+            className="focus-ring w-40 rounded-2xl bg-white px-3 py-2 shadow-[var(--shadow-crisp)] text-right text-5xl font-black text-primary outline-none"
             id="price"
             max={200}
             min={1}
@@ -410,10 +410,10 @@ function ChoiceButton({
 }): React.ReactElement {
   return (
     <button
-      className={`focus-ring min-h-16 rounded-2xl border-2 p-4 text-left transition ${
+      className={`focus-ring interactive-lift min-h-16 rounded-2xl border p-4 text-left ${
         active
-          ? "border-primary bg-primary-soft text-primary"
-          : "border-[var(--border)] bg-white text-foreground hover:border-primary/40"
+          ? "border-primary bg-primary-soft text-primary shadow-[var(--shadow-crisp)]"
+          : "border-[var(--border)] bg-white/84 text-foreground hover:border-primary/40"
       }`}
       onClick={onClick}
       type="button"

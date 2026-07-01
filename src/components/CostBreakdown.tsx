@@ -20,9 +20,9 @@ export function CostBreakdown({ report }: CostBreakdownProps): React.ReactElemen
       <div className="mb-3 text-xs font-extrabold tracking-[0.08em] text-muted">
         비용 Breakdown
       </div>
-      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]">
+      <div className="premium-panel overflow-hidden rounded-[24px]">
         {visibleItems.map((item) => (
-          <div className="border-b border-[var(--border)] last:border-b-0" key={item.key}>
+          <div className="border-b border-[var(--border)] last:border-b-0 hover:bg-white/55" key={item.key}>
             <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <div className="mb-2 flex flex-wrap items-center gap-2">

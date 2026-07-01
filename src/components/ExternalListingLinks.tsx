@@ -35,7 +35,7 @@ export function ExternalListingLinks({
     <section>
       {showIntro ? (
         <>
-          <div className="mb-2 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+          <div className="mb-2 text-xs font-extrabold text-muted">
             실제 매물은 익숙한 서비스에서 확인하세요
           </div>
           <p className="mb-3 text-sm leading-6 text-text-subtle">
@@ -50,7 +50,7 @@ export function ExternalListingLinks({
 
           return (
             <a
-              className="focus-ring flex min-h-[76px] items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lifted)]"
+              className="focus-ring flex min-h-[76px] items-center justify-between gap-4 interactive-lift rounded-2xl border border-[var(--border)] bg-white/86 p-4 shadow-[var(--shadow-soft)]"
               href={href}
               key={item.key}
               rel="noopener noreferrer"

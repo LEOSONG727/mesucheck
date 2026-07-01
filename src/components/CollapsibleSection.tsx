@@ -20,7 +20,7 @@ export function CollapsibleSection({
   const contentId = useId();
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]">
+    <section className="premium-panel overflow-hidden rounded-[24px]">
       <button
         aria-controls={contentId}
         aria-expanded={open}

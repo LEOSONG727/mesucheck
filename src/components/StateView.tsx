@@ -55,7 +55,7 @@ export function StateView({
       <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-surface-muted text-muted">
         {icon}
       </div>
-      <h2 className="text-xl font-black tracking-[-0.02em]">
+      <h2 className="text-xl font-black">
         {title ?? copy.title}
       </h2>
       <p className="mt-3 max-w-md text-sm leading-7 text-text-subtle">

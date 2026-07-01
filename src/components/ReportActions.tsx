@@ -46,14 +46,14 @@ export function ReportActions({
       }
     >
       <Link
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-white px-4 text-sm font-bold text-text-subtle"
+        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border-strong)] bg-white/88 px-4 text-sm font-bold text-text-subtle"
         href={`/estimate?complexId=${report.input.complexId}`}
       >
         <RotateCcw size={16} />
         다시 계산
       </Link>
       <button
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-extrabold text-white"
+        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl bg-primary px-4 text-sm font-extrabold text-white"
         onClick={() => void copyFamilySummary()}
         type="button"
       >
@@ -61,7 +61,7 @@ export function ReportActions({
         가족에게 공유할 요약 복사
       </button>
       <button
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-white px-4 text-sm font-bold text-text-subtle"
+        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border)] bg-white/88 px-4 text-sm font-bold text-text-subtle"
         onClick={showPdfToast}
         type="button"
       >

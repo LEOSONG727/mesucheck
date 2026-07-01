@@ -23,15 +23,15 @@ export function NewsletterSignup({
 
   return (
     <section
-      className={`rounded-[18px] bg-primary p-6 text-white shadow-[var(--shadow-soft)] ${
+      className={`relative overflow-hidden rounded-[28px] bg-primary-strong p-6 text-white shadow-[var(--shadow-lifted)] ${
         compact ? "" : "md:p-8"
       }`}
     >
-      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-white/55">
+      <div className="mb-2 flex items-center gap-2 text-xs font-bold text-white/58">
         <Mail size={15} />
         월간 뉴스레터
       </div>
-      <h2 className="max-w-xl text-balance text-2xl font-black leading-tight tracking-[-0.03em]">
+      <h2 className="max-w-xl text-balance text-2xl font-black leading-tight">
         바뀌는 규제·세금, 나에게 미치는 영향만 쉽게
       </h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-white/64">
@@ -40,7 +40,7 @@ export function NewsletterSignup({
       </p>
       <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={submitNewsletter}>
         <input
-          className="focus-ring min-h-12 flex-1 rounded-xl border border-white/20 bg-white/12 px-4 text-sm text-white outline-none placeholder:text-white/42"
+          className="focus-ring min-h-12 flex-1 rounded-2xl border border-white/20 bg-white/12 px-4 text-sm text-white outline-none placeholder:text-white/42"
           onChange={(event) => setEmail(event.target.value)}
           placeholder="이메일 주소"
           required
@@ -48,7 +48,7 @@ export function NewsletterSignup({
           value={email}
         />
         <button
-          className="focus-ring min-h-12 rounded-xl bg-accent px-5 text-sm font-extrabold text-white"
+          className="focus-ring min-h-12 interactive-lift rounded-2xl bg-accent px-5 text-sm font-extrabold text-white"
           type="submit"
         >
           {subscribed ? "구독 완료" : "구독하기"}

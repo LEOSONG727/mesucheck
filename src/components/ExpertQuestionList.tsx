@@ -40,7 +40,7 @@ export function ExpertQuestionList({
     <section>
       {showHeader ? (
         <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+          <div className="text-xs font-extrabold text-muted">
             전문가에게 물어볼 질문
           </div>
           <button

@@ -35,7 +35,7 @@ export default async function ReportPage({
   const naverLink = report.externalLinks.naverLand ?? "https://m.land.naver.com";
 
   return (
-    <section className="content-shell grid gap-5 py-7">
+    <section className="content-shell grid gap-5 py-8">
       <ReportHero report={report} />
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <main className="grid gap-5">
@@ -98,9 +98,9 @@ export default async function ReportPage({
         </main>
 
         <aside className="lg:sticky lg:top-24">
-          <div className="grid gap-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-soft)]">
+          <div className="premium-panel grid gap-3 rounded-[24px] p-4">
             <div>
-              <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+              <div className="text-xs font-extrabold text-muted">
                 다음 행동
               </div>
               <p className="mt-2 text-sm leading-6 text-text-subtle">
@@ -109,7 +109,7 @@ export default async function ReportPage({
               </p>
             </div>
 
-            <div className="grid gap-2 rounded-xl bg-surface-muted p-3">
+            <div className="grid gap-2 rounded-2xl bg-surface-muted p-3 shadow-[var(--shadow-crisp)]">
               <MiniMetric
                 label="매매가 외 추가 비용"
                 value={formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
@@ -129,7 +129,7 @@ export default async function ReportPage({
             />
 
             <a
-              className="focus-ring flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-white px-4 text-sm font-extrabold text-text-subtle"
+              className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border-strong)] bg-white/88 px-4 text-sm font-extrabold text-text-subtle"
               href={naverLink}
               rel="noopener noreferrer"
               target="_blank"
@@ -156,7 +156,7 @@ function RiskFocus({ items }: { items: RiskBadgeItem[] }): React.ReactElement {
     <section>
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <div className="text-xs font-extrabold tracking-[0.08em] text-muted">
+          <div className="text-xs font-extrabold text-muted">
             핵심 확인 3개
           </div>
           <h2 className="mt-1 text-xl font-black">먼저 볼 항목만 추렸습니다</h2>
@@ -190,7 +190,7 @@ function InfoRows({
   return (
     <div>
       {title ? <SectionLabel>{title}</SectionLabel> : null}
-      <div className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)]">
+      <div className="divide-y divide-[var(--border)] rounded-2xl border border-[var(--border)] bg-white/62">
         {items.map((item) => (
           <article className="p-4" key={item.title}>
             <div className="flex flex-wrap items-center gap-2">
@@ -211,7 +211,7 @@ function SectionLabel({
   children: React.ReactNode;
 }): React.ReactElement {
   return (
-    <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.08em] text-muted">
+    <div className="mb-3 text-xs font-extrabold text-muted">
       {children}
     </div>
   );

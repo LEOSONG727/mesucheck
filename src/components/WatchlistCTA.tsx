@@ -64,7 +64,7 @@ export function WatchlistCTA({
 
   return (
     <button
-      className={`focus-ring flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border-2 px-4 text-sm font-extrabold transition ${
+      className={`focus-ring flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-4 shadow-[var(--shadow-crisp)] text-sm font-extrabold transition ${
         saved
           ? "border-primary bg-primary-soft text-primary"
           : "border-[var(--border-strong)] bg-white text-text-subtle hover:border-primary hover:text-primary"

@@ -19,7 +19,7 @@ export function RiskBadge({ item }: RiskBadgeProps): React.ReactElement {
     );
 
   return (
-    <div className="flex gap-3 rounded-xl border border-[var(--border)] bg-white p-4">
+    <div className="interactive-lift flex gap-3 rounded-2xl border border-[var(--border)] bg-white/86 p-4 shadow-[var(--shadow-soft)]">
       <div className="mt-0.5 text-primary">{icon}</div>
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex flex-wrap items-center gap-2">

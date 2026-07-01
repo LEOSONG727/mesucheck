@@ -12,8 +12,9 @@ import { RiskBadge } from "@/components/RiskBadge";
 import { WatchlistCTA } from "@/components/WatchlistCTA";
 import { ButtonLink } from "@/components/ui/Button";
 import { Surface } from "@/components/ui/Surface";
-import { buildMockReport, getComplexById } from "@/data/mock-data";
 import { formatKRWShort } from "@/lib/formatters";
+import { getComplexById } from "@/lib/repositories/complexes";
+import { buildEstimateReport } from "@/lib/repositories/reports";
 import type {
   BuyerConditions,
   CheckCard,
@@ -32,8 +33,8 @@ export default async function ReportPage({
 }: ReportPageProps): Promise<React.ReactElement> {
   const sp = await searchParams;
   const conditions = parseConditions(sp);
-  const report = buildMockReport(conditions);
-  const complex = getComplexById(report.input.complexId);
+  const report = await buildEstimateReport(conditions);
+  const complex = await getComplexById(report.input.complexId);
   const naverLink = report.externalLinks.naverLand ?? "https://m.land.naver.com";
 
   return (

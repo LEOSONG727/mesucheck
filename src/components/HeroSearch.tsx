@@ -17,21 +17,29 @@ import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Surface } from "@/components/ui/Surface";
 import { TextInput } from "@/components/ui/TextInput";
-import { BASIS_DATE, exampleSearchTerms, searchComplexes } from "@/data/mock-data";
+import { filterComplexes } from "@/lib/complex-search";
 import { formatKRWShort } from "@/lib/formatters";
 import type { Complex } from "@/types/maesucheck";
 
 type HeroSearchProps = {
+  basisDate: string;
+  complexes: Complex[];
   initialQuery?: string;
+  searchTerms: string[];
 };
 
-export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactElement {
+export function HeroSearch({
+  basisDate,
+  complexes,
+  initialQuery = "",
+  searchTerms,
+}: HeroSearchProps): React.ReactElement {
   const [query, setQuery] = useState(initialQuery);
   const normalizedQuery = query.trim();
   const isErrorDemo = ["오류", "에러", "error"].includes(
     normalizedQuery.toLowerCase(),
   );
-  const results = useMemo(() => searchComplexes(query), [query]);
+  const results = useMemo(() => filterComplexes(complexes, query), [complexes, query]);
   const primaryComplex = results[0];
 
   return (
@@ -42,7 +50,7 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
           icon={<ShieldCheck size={15} />}
           variant="primary"
         >
-          자양동 베타 · 기준일 {BASIS_DATE}
+          자양동 베타 · 기준일 {basisDate}
         </Badge>
         <h1 className="max-w-4xl text-balance text-4xl font-black leading-[1.12] text-foreground md:text-6xl">
           네이버에서 본 그 집,
@@ -103,7 +111,7 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
 
         <div className="px-2 py-4">
           <div className="mb-4 flex flex-wrap gap-2">
-            {exampleSearchTerms.map((term) => (
+            {searchTerms.map((term) => (
               <Button
                 key={term}
                 onClick={() => setQuery(term)}

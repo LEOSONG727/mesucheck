@@ -9,6 +9,7 @@
 - Next.js App Router + TypeScript strict 기반 프로젝트
 - CSS variables 기반 디자인 토큰
 - Supabase browser/server 유틸
+- mock/Supabase 전환을 위한 repository 데이터 접근 계층
 - formatter 유틸
 - 홈/검색, 단지 요약, 조건 입력, 리포트, 관심단지, 뉴스레터 라우트
 - localStorage 기반 관심단지 저장
@@ -32,7 +33,7 @@ npm install
 cp .env.local.example .env.local
 ```
 
-Phase 0~2는 외부 API와 Supabase 연결 없이 실행됩니다.
+Phase 0~2는 기본값에서 외부 API와 Supabase 연결 없이 실행됩니다.
 
 ## 실행
 
@@ -78,6 +79,17 @@ Supabase SQL editor에서 순서대로 실행합니다.
 
 모든 세금·규제·법령 seed는 `basis_date='2026-06-30'`, `verification_status='needs_review'` 기준의 검토용 데이터입니다.
 
+단지 목록/요약 조회를 Supabase adapter로 시도하려면 `.env.local`에서 아래 값을 설정합니다.
+
+```env
+MAESUCHECK_DATA_SOURCE=supabase
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+```
+
+Supabase env가 없거나 조회 결과가 비어 있으면 mock 데이터로 fallback합니다.
+
 ## 아직 mock/demo인 부분
 
 - 실거래가 데이터는 mock seed
@@ -85,7 +97,7 @@ Supabase SQL editor에서 순서대로 실행합니다.
 - 관심단지는 localStorage 저장
 - 뉴스레터는 Toast만 표시
 - PDF/공유 링크는 준비 중 상태
-- Supabase 유틸은 준비만 되어 있고 화면에서 DB를 조회하지 않음
+- Supabase adapter는 단지 목록/요약 조회 준비 단계이며, 기본 실행은 mock fallback
 
 ## 다음 Phase
 

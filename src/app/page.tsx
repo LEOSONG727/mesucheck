@@ -2,6 +2,11 @@ import { Calculator, FileText, SearchCheck, ShieldCheck } from "lucide-react";
 import { HeroSearch } from "@/components/HeroSearch";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { Surface } from "@/components/ui/Surface";
+import { exampleSearchTerms } from "@/data/ui-copy";
+import {
+  FALLBACK_BASIS_DATE,
+  getComplexes,
+} from "@/lib/repositories/complexes";
 
 type HomePageProps = {
   searchParams: Promise<{ q?: string }>;
@@ -11,10 +16,17 @@ export default async function HomePage({
   searchParams,
 }: HomePageProps): Promise<React.ReactElement> {
   const { q = "" } = await searchParams;
+  const complexes = await getComplexes();
+  const basisDate = complexes[0]?.basisDate ?? FALLBACK_BASIS_DATE;
 
   return (
     <>
-      <HeroSearch initialQuery={q} />
+      <HeroSearch
+        basisDate={basisDate}
+        complexes={complexes}
+        initialQuery={q}
+        searchTerms={exampleSearchTerms}
+      />
       <section className="content-shell grid-flow-dense grid gap-4 py-8 md:grid-cols-3">
         <StepCard
           icon={<SearchCheck size={22} />}

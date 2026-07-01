@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ConditionSummary } from "@/components/ConditionSummary";
 import { Button } from "@/components/ui/Button";
 import { Surface } from "@/components/ui/Surface";
-import { loadingMessages } from "@/data/mock-data";
+import { loadingMessages } from "@/data/ui-copy";
 import { cn } from "@/lib/classnames";
 import { formatAreaM2, formatKRWShort } from "@/lib/formatters";
 import type { BuyerConditions, Complex, TriState } from "@/types/maesucheck";

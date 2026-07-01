@@ -1,24 +1,25 @@
+import { Badge } from "@/components/ui/Badge";
 import type { ConfidenceLabel as ConfidenceLabelType } from "@/types/maesucheck";
 
 const labelMap: Record<
   ConfidenceLabelType,
-  { text: string; className: string }
+  { text: string; variant: React.ComponentProps<typeof Badge>["variant"] }
 > = {
   rule_based: {
     text: "규칙 기반",
-    className: "bg-success-soft text-success border-success/15",
+    variant: "success",
   },
   variable: {
     text: "변동 가능",
-    className: "bg-warning-soft text-warning border-warning/15",
+    variant: "warning",
   },
   needs_expert_check: {
     text: "별도 확인",
-    className: "bg-info-soft text-info border-info/15",
+    variant: "info",
   },
   concept_only: {
     text: "참고 개념",
-    className: "bg-surface-muted text-text-subtle border-[var(--border)]",
+    variant: "neutral",
   },
 };
 
@@ -31,13 +32,7 @@ export function ConfidenceLabel({
 }: ConfidenceLabelProps): React.ReactElement {
   const label = labelMap[value];
 
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-extrabold shadow-[var(--shadow-crisp)] ${label.className}`}
-    >
-      {label.text}
-    </span>
-  );
+  return <Badge variant={label.variant}>{label.text}</Badge>;
 }
 
 export function getConfidenceText(value: ConfidenceLabelType): string {

@@ -1,6 +1,7 @@
 import { Calculator, FileText, SearchCheck, ShieldCheck } from "lucide-react";
 import { HeroSearch } from "@/components/HeroSearch";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { Surface } from "@/components/ui/Surface";
 
 type HomePageProps = {
   searchParams: Promise<{ q?: string }>;
@@ -32,7 +33,7 @@ export default async function HomePage({
         />
       </section>
       <section className="content-shell py-4">
-        <div className="glass-panel rounded-[24px] p-5 md:p-6">
+        <Surface padding="lg" variant="glass">
           <div className="flex gap-3">
             <ShieldCheck className="mt-0.5 shrink-0 text-success" size={22} />
             <div>
@@ -44,7 +45,7 @@ export default async function HomePage({
               </p>
             </div>
           </div>
-        </div>
+        </Surface>
       </section>
       <section className="content-shell py-6 pb-14">
         <NewsletterSignup />
@@ -63,12 +64,12 @@ function StepCard({
   body: string;
 }): React.ReactElement {
   return (
-    <article className="premium-panel interactive-lift rounded-[24px] p-5">
+    <Surface as="article" interactive variant="premium">
       <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary shadow-[var(--shadow-crisp)]">
         {icon}
       </div>
       <h2 className="text-lg font-black">{title}</h2>
       <p className="mt-2 text-sm leading-7 text-text-subtle">{body}</p>
-    </article>
+    </Surface>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { Copy, FileClock, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { formatKRWShort } from "@/lib/formatters";
 import type { CostEstimateReport } from "@/types/maesucheck";
 
@@ -45,29 +45,27 @@ export function ReportActions({
           : "grid gap-3 sm:grid-cols-[1fr_1.4fr_1fr]"
       }
     >
-      <Link
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border-strong)] bg-white/88 px-4 text-sm font-bold text-text-subtle"
+      <ButtonLink
         href={`/estimate?complexId=${report.input.complexId}`}
+        leftIcon={<RotateCcw size={16} />}
+        variant="secondary"
       >
-        <RotateCcw size={16} />
         다시 계산
-      </Link>
-      <button
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl bg-primary px-4 text-sm font-extrabold text-white"
+      </ButtonLink>
+      <Button
+        leftIcon={<Copy size={16} />}
         onClick={() => void copyFamilySummary()}
-        type="button"
+        variant="primary"
       >
-        <Copy size={16} />
         가족에게 공유할 요약 복사
-      </button>
-      <button
-        className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border)] bg-white/88 px-4 text-sm font-bold text-text-subtle"
+      </Button>
+      <Button
+        leftIcon={<FileClock size={16} />}
         onClick={showPdfToast}
-        type="button"
+        variant="ghost"
       >
-        <FileClock size={16} />
         PDF 준비 중
-      </button>
+      </Button>
     </section>
   );
 }

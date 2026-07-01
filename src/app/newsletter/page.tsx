@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { ButtonLink } from "@/components/ui/Button";
 
 export default function NewsletterPage(): React.ReactElement {
   return (
@@ -18,13 +18,9 @@ export default function NewsletterPage(): React.ReactElement {
         </p>
       </div>
       <NewsletterSignup />
-      <Link
-        className="focus-ring inline-flex min-h-12 w-fit items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-black text-white"
-        href="/"
-      >
+      <ButtonLink className="w-fit" href="/" rightIcon={<ArrowRight size={17} />}>
         단지 검색으로 돌아가기
-        <ArrowRight size={17} />
-      </Link>
+      </ButtonLink>
     </section>
   );
 }

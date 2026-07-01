@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { StateView } from "@/components/StateView";
+import { Badge } from "@/components/ui/Badge";
+import { Button, ButtonLink } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
+import { TextInput } from "@/components/ui/TextInput";
 import { BASIS_DATE, exampleSearchTerms, searchComplexes } from "@/data/mock-data";
 import { formatKRWShort } from "@/lib/formatters";
 import type { Complex } from "@/types/maesucheck";
@@ -33,10 +37,13 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
   return (
     <section className="content-shell grid gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-start lg:py-12">
       <div className="animate-fade-up pt-2 lg:pt-8">
-        <div className="glass-panel mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-extrabold text-primary">
-          <ShieldCheck size={15} />
+        <Badge
+          className="mb-5"
+          icon={<ShieldCheck size={15} />}
+          variant="primary"
+        >
           자양동 베타 · 기준일 {BASIS_DATE}
-        </div>
+        </Badge>
         <h1 className="max-w-4xl text-balance text-4xl font-black leading-[1.12] text-foreground md:text-6xl">
           네이버에서 본 그 집,
           <br />
@@ -49,19 +56,16 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
           리스크는 내 조건 기준으로 한 번 더 확인합니다.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Link
-            className="focus-ring interactive-lift flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-5 text-sm font-black text-white shadow-[var(--shadow-lifted)]"
+          <ButtonLink
             href={primaryComplex ? `/estimate?complexId=${primaryComplex.id}` : "/estimate"}
+            rightIcon={<ArrowRight size={18} />}
+            variant="primary"
           >
             내 상황으로 매수 리스크 확인하기
-            <ArrowRight size={18} />
-          </Link>
-          <Link
-            className="focus-ring interactive-lift flex min-h-12 items-center justify-center rounded-2xl border border-[var(--border-strong)] bg-white/82 px-5 text-sm font-bold text-text-subtle"
-            href="/watchlist"
-          >
+          </ButtonLink>
+          <ButtonLink href="/watchlist" variant="secondary">
             관심단지 보기
-          </Link>
+          </ButtonLink>
         </div>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -71,8 +75,13 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
         </div>
       </div>
 
-      <div className="premium-panel animate-fade-up overflow-hidden rounded-[28px] p-3">
-        <div className="rounded-[22px] bg-primary-strong p-5 text-white">
+      <Surface
+        className="animate-fade-up overflow-hidden p-3"
+        padding="none"
+        radius="xl"
+        variant="premium"
+      >
+        <Surface padding="md" radius="lg" variant="dark">
           <div className="flex items-center justify-between gap-4">
             <div>
               <div className="text-xs font-bold text-white/55">매수체크 리포트 시작</div>
@@ -82,29 +91,27 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
               <Search size={20} />
             </div>
           </div>
-          <div className="mt-5 flex min-h-13 items-center gap-3 rounded-2xl border border-white/12 bg-white px-4 text-foreground shadow-[var(--shadow-crisp)] focus-within:border-accent">
-            <Search className="shrink-0 text-muted" size={18} />
-            <input
-              className="min-h-13 w-full bg-transparent text-base font-semibold outline-none placeholder:text-muted"
-              id="complex-search"
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="테라팰리스, 자양동, 더샵..."
-              value={query}
-            />
-          </div>
-        </div>
+          <TextInput
+            className="mt-5"
+            id="complex-search"
+            leftIcon={<Search size={18} />}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="테라팰리스, 자양동, 더샵..."
+            value={query}
+          />
+        </Surface>
 
         <div className="px-2 py-4">
           <div className="mb-4 flex flex-wrap gap-2">
             {exampleSearchTerms.map((term) => (
-              <button
-                className="focus-ring rounded-full border border-[var(--border)] bg-white/78 px-3 py-2 text-sm font-bold text-text-subtle shadow-[var(--shadow-crisp)]"
+              <Button
                 key={term}
                 onClick={() => setQuery(term)}
-                type="button"
+                size="sm"
+                variant="ghost"
               >
                 {term}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -120,7 +127,7 @@ export function HeroSearch({ initialQuery = "" }: HeroSearchProps): React.ReactE
             </div>
           )}
         </div>
-      </div>
+      </Surface>
     </section>
   );
 }
@@ -135,13 +142,13 @@ function HeroProof({
   value: string;
 }): React.ReactElement {
   return (
-    <div className="glass-panel rounded-2xl p-4">
+    <Surface padding="md" radius="md" variant="glass">
       <div className="mb-3 flex items-center gap-2 text-xs font-extrabold text-primary">
         {icon}
         {label}
       </div>
       <div className="text-sm font-bold text-text-subtle">{value}</div>
-    </div>
+    </Surface>
   );
 }
 

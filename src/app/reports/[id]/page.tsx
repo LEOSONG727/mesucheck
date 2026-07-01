@@ -10,6 +10,8 @@ import { ReportActions } from "@/components/ReportActions";
 import { ReportHero } from "@/components/ReportHero";
 import { RiskBadge } from "@/components/RiskBadge";
 import { WatchlistCTA } from "@/components/WatchlistCTA";
+import { ButtonLink } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
 import { buildMockReport, getComplexById } from "@/data/mock-data";
 import { formatKRWShort } from "@/lib/formatters";
 import type {
@@ -98,7 +100,7 @@ export default async function ReportPage({
         </main>
 
         <aside className="lg:sticky lg:top-24">
-          <div className="premium-panel grid gap-3 rounded-[24px] p-4">
+          <Surface as="div" className="grid gap-3" padding="sm" variant="premium">
             <div>
               <div className="text-xs font-extrabold text-muted">
                 다음 행동
@@ -109,7 +111,7 @@ export default async function ReportPage({
               </p>
             </div>
 
-            <div className="grid gap-2 rounded-2xl bg-surface-muted p-3 shadow-[var(--shadow-crisp)]">
+            <Surface className="grid gap-2" padding="sm" radius="md" variant="muted">
               <MiniMetric
                 label="매매가 외 추가 비용"
                 value={formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
@@ -120,7 +122,7 @@ export default async function ReportPage({
                   report.summary.estimatedTotalAcquisitionCostKRW,
                 )}
               />
-            </div>
+            </Surface>
 
             <WatchlistCTA
               complex={complex}
@@ -128,23 +130,23 @@ export default async function ReportPage({
               mode="report"
             />
 
-            <a
-              className="focus-ring flex min-h-12 items-center justify-center gap-2 interactive-lift rounded-2xl border border-[var(--border-strong)] bg-white/88 px-4 text-sm font-extrabold text-text-subtle"
+            <ButtonLink
               href={naverLink}
               rel="noopener noreferrer"
+              rightIcon={<ExternalLink size={16} />}
               target="_blank"
+              variant="secondary"
             >
               실제 매물 확인하기
-              <ExternalLink size={16} />
-            </a>
+            </ButtonLink>
 
             <ReportActions report={report} layout="stacked" />
 
-            <p className="rounded-xl bg-success-soft p-3 text-xs leading-6 text-text-subtle">
+            <p className="rounded-2xl bg-success-soft p-3 text-xs leading-6 text-text-subtle">
               공유 링크와 PDF 저장은 준비 중입니다. 지금은 요약 복사와 관심단지
               저장을 사용할 수 있어요.
             </p>
-          </div>
+          </Surface>
         </aside>
       </div>
     </section>

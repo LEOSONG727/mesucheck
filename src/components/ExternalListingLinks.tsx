@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { Surface } from "@/components/ui/Surface";
 import type { ExternalLinks } from "@/types/maesucheck";
 
 type ExternalListingLinksProps = {
@@ -49,11 +50,15 @@ export function ExternalListingLinks({
           const href = links[item.key];
 
           return (
-            <a
-              className="focus-ring flex min-h-[76px] items-center justify-between gap-4 interactive-lift rounded-2xl border border-[var(--border)] bg-white/86 p-4 shadow-[var(--shadow-soft)]"
+            <Surface
+              as="a"
+              className="focus-ring flex min-h-[76px] items-center justify-between gap-4"
               href={href}
+              interactive
               key={item.key}
+              padding="sm"
               rel="noopener noreferrer"
+              radius="md"
               target="_blank"
             >
               <span>
@@ -65,7 +70,7 @@ export function ExternalListingLinks({
                 </span>
               </span>
               <ExternalLink className="shrink-0 text-muted" size={18} />
-            </a>
+            </Surface>
           );
         })}
       </div>

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { AlertCircle, Loader2, Search, Star } from "lucide-react";
+import { Button, ButtonLink } from "@/components/ui/Button";
 
 type StateViewProps = {
   state: "loading" | "empty" | "error" | "watchlist-empty";
@@ -66,13 +66,14 @@ export function StateView({
       {state === "empty" ? (
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {["자양동", "래미안", "더샵", "e편한세상", "아크로"].map((term) => (
-            <Link
-              className="focus-ring rounded-full border border-[var(--border)] bg-white px-4 py-2 text-sm font-bold text-text-subtle"
+            <ButtonLink
               href={`/?q=${encodeURIComponent(term)}`}
               key={term}
+              size="sm"
+              variant="ghost"
             >
               {term}
-            </Link>
+            </ButtonLink>
           ))}
         </div>
       ) : null}
@@ -80,37 +81,24 @@ export function StateView({
       {state === "error" ? (
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           {onRetry ? (
-            <button
-              className="focus-ring min-h-11 rounded-xl bg-primary px-5 py-3 text-sm font-extrabold text-white"
-              onClick={onRetry}
-              type="button"
-            >
+            <Button onClick={onRetry}>
               다시 시도
-            </button>
+            </Button>
           ) : (
-            <Link
-              className="focus-ring min-h-11 rounded-xl bg-primary px-5 py-3 text-sm font-extrabold text-white"
-              href="/"
-            >
+            <ButtonLink href="/">
               다시 시도
-            </Link>
+            </ButtonLink>
           )}
-          <Link
-            className="focus-ring min-h-11 rounded-xl border border-[var(--border-strong)] bg-white px-5 py-3 text-sm font-bold text-text-subtle"
-            href="/"
-          >
+          <ButtonLink href="/" variant="secondary">
             홈으로 돌아가기
-          </Link>
+          </ButtonLink>
         </div>
       ) : null}
 
       {state === "watchlist-empty" ? (
-        <Link
-          className="focus-ring mt-7 min-h-11 rounded-xl bg-primary px-5 py-3 text-sm font-extrabold text-white"
-          href="/"
-        >
+        <ButtonLink className="mt-7" href="/">
           매수 체크 시작하기
-        </Link>
+        </ButtonLink>
       ) : null}
     </section>
   );

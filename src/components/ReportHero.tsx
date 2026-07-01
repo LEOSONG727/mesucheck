@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/Badge";
 import { formatKRWShort, getBasisDateLabel } from "@/lib/formatters";
 import type { CostEstimateReport } from "@/types/maesucheck";
 
@@ -12,16 +13,13 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
       <div className="absolute inset-x-0 top-0 -z-10 h-px bg-white/35" />
 
       <div className="mb-6 flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-white/14 px-3 py-1.5 text-xs font-black text-white/82">
+        <Badge variant="inverted">
           검토 리포트
-        </span>
+        </Badge>
         {report.conditionSummary.slice(0, 4).map((item) => (
-          <span
-            className="rounded-full bg-white/8 px-3 py-1.5 text-xs font-bold text-white/72"
-            key={item}
-          >
+          <Badge className="bg-white/8 text-white/72" key={item} variant="inverted">
             {item}
-          </span>
+          </Badge>
         ))}
       </div>
 
@@ -49,9 +47,9 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
             label="총 예상 매입 비용"
             value={formatKRWShort(report.summary.estimatedTotalAcquisitionCostKRW)}
           />
-          <div className="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-bold text-white/62">
+          <Badge className="justify-center rounded-2xl px-4 py-3 text-white/62" variant="inverted">
             {getBasisDateLabel(report.summary.basisDate)} · 참고 리포트
-          </div>
+          </Badge>
         </div>
       </div>
     </section>

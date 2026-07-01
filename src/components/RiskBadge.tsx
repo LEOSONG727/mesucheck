@@ -1,5 +1,6 @@
 import { AlertTriangle, CheckCircle2, Info, ShieldQuestion } from "lucide-react";
 import { ConfidenceLabel } from "@/components/ConfidenceLabel";
+import { Surface } from "@/components/ui/Surface";
 import type { RiskBadgeItem } from "@/types/maesucheck";
 
 type RiskBadgeProps = {
@@ -19,7 +20,7 @@ export function RiskBadge({ item }: RiskBadgeProps): React.ReactElement {
     );
 
   return (
-    <div className="interactive-lift flex gap-3 rounded-2xl border border-[var(--border)] bg-white/86 p-4 shadow-[var(--shadow-soft)]">
+    <Surface className="flex gap-3" interactive padding="sm" radius="md">
       <div className="mt-0.5 text-primary">{icon}</div>
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -28,6 +29,6 @@ export function RiskBadge({ item }: RiskBadgeProps): React.ReactElement {
         </div>
         <p className="text-sm leading-6 text-text-subtle">{item.description}</p>
       </div>
-    </div>
+    </Surface>
   );
 }

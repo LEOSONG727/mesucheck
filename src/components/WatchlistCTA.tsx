@@ -3,6 +3,7 @@
 import { Bookmark } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { useToast } from "@/components/ToastProvider";
+import { Button } from "@/components/ui/Button";
 import {
   getServerWatchlistSnapshot,
   getWatchlistSnapshot,
@@ -63,17 +64,13 @@ export function WatchlistCTA({
       : "이 단지 저장하고 나중에 다시 보기";
 
   return (
-    <button
-      className={`focus-ring flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-4 shadow-[var(--shadow-crisp)] text-sm font-extrabold transition ${
-        saved
-          ? "border-primary bg-primary-soft text-primary"
-          : "border-[var(--border-strong)] bg-white text-text-subtle hover:border-primary hover:text-primary"
-      }`}
+    <Button
+      fullWidth
+      leftIcon={<Bookmark size={17} fill={saved ? "currentColor" : "none"} />}
       onClick={toggleSaved}
-      type="button"
+      variant={saved ? "soft" : "secondary"}
     >
-      <Bookmark size={17} fill={saved ? "currentColor" : "none"} />
       {label}
-    </button>
+    </Button>
   );
 }

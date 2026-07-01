@@ -4,7 +4,10 @@ import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ConditionSummary } from "@/components/ConditionSummary";
+import { Button } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
 import { loadingMessages } from "@/data/mock-data";
+import { cn } from "@/lib/classnames";
 import { formatAreaM2, formatKRWShort } from "@/lib/formatters";
 import type { BuyerConditions, Complex, TriState } from "@/types/maesucheck";
 
@@ -82,7 +85,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
   if (loading) {
     return (
       <section className="content-shell grid min-h-[520px] place-items-center py-8">
-        <div className="premium-panel w-full max-w-xl rounded-[28px] p-5">
+        <Surface className="w-full max-w-xl" radius="xl" variant="premium">
           <div className="mb-4 flex items-center gap-3">
             <span className="size-2 rounded-full bg-accent" />
             <span className="text-sm font-extrabold text-text-subtle">
@@ -102,7 +105,7 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
               <div className="skeleton h-24" />
             </div>
           </div>
-        </div>
+        </Surface>
       </section>
     );
   }
@@ -123,7 +126,11 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
           goNext();
         }}
       >
-        <div className="glass-panel sticky top-[78px] z-20 -mx-4 rounded-none border-x-0 px-4 py-4 sm:mx-0 sm:rounded-[24px] sm:border">
+        <Surface
+          className="sticky top-[78px] z-20 -mx-4 rounded-none border-x-0 px-4 py-4 sm:mx-0 sm:rounded-[24px] sm:border"
+          padding="none"
+          variant="glass"
+        >
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
               <div className="text-xs font-extrabold text-muted">
@@ -143,41 +150,44 @@ export function ConditionForm({ complex }: ConditionFormProps): React.ReactEleme
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-        </div>
+        </Surface>
 
-        <div className="premium-panel rounded-[28px] p-5 md:p-7">{renderStepContent(step, conditions, updateCondition, complex)}</div>
+        <Surface padding="lg" radius="xl" variant="premium">
+          {renderStepContent(step, conditions, updateCondition, complex)}
+        </Surface>
 
         <div className="sticky bottom-4 z-20 grid grid-cols-[auto_1fr] gap-3">
-          <button
-            className="focus-ring flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[var(--border-strong)] bg-white/88 px-5 shadow-[var(--shadow-crisp)] text-sm font-extrabold text-text-subtle disabled:opacity-40"
+          <Button
             disabled={step === 0}
+            leftIcon={<ArrowLeft size={17} />}
             onClick={goBack}
-            type="button"
+            size="lg"
+            variant="secondary"
           >
-            <ArrowLeft size={17} />
             이전
-          </button>
-          <button
-            className="focus-ring flex min-h-14 items-center justify-center gap-2 interactive-lift rounded-2xl bg-accent px-5 text-base font-black text-white shadow-[var(--shadow-lifted)]"
+          </Button>
+          <Button
+            rightIcon={<ArrowRight size={18} />}
+            size="lg"
             type="submit"
+            variant="accent"
           >
             {step === reviewStep ? "비용·리스크 리포트 보기" : "다음"}
-            <ArrowRight size={18} />
-          </button>
+          </Button>
         </div>
       </form>
 
       <aside className="hidden lg:sticky lg:top-24 lg:grid lg:gap-3">
-        <div className="premium-panel rounded-[24px] p-5">
+        <Surface variant="premium">
           <div className="mb-3 text-xs font-extrabold text-muted">
             현재 조건
           </div>
           <ConditionSummary complex={complex} conditions={conditions} />
-        </div>
-        <div className="glass-panel rounded-[24px] p-5 text-sm leading-7 text-text-subtle">
+        </Surface>
+        <Surface className="text-sm leading-7 text-text-subtle" variant="glass">
           모르는 항목은 그대로 선택해도 됩니다. 리포트에서는 해당 항목을 별도
           확인 또는 전문가 확인 필요로 표시합니다.
-        </div>
+        </Surface>
       </aside>
     </section>
   );
@@ -195,7 +205,7 @@ function renderStepContent(
         helper="호가가 아니라 실제 검토 중인 예상 매수가를 넣어주세요."
         title="매수 예상가가 얼마인가요?"
       >
-        <div className="rounded-[24px] border border-[var(--border)] bg-surface-muted p-5 text-center shadow-[var(--shadow-crisp)]">
+        <Surface className="text-center" variant="muted">
           <label className="mb-2 block text-xs font-bold text-muted" htmlFor="price">
             억 원 단위
           </label>
@@ -217,7 +227,7 @@ function renderStepContent(
           <div className="mt-3 text-sm font-bold text-warning">
             {formatKRWShort(conditions.priceKRW)} 기준
           </div>
-        </div>
+        </Surface>
       </Question>
     );
   }
@@ -410,11 +420,12 @@ function ChoiceButton({
 }): React.ReactElement {
   return (
     <button
-      className={`focus-ring interactive-lift min-h-16 rounded-2xl border p-4 text-left ${
+      className={cn(
+        "focus-ring interactive-lift min-h-16 rounded-2xl border p-4 text-left",
         active
           ? "border-primary bg-primary-soft text-primary shadow-[var(--shadow-crisp)]"
-          : "border-[var(--border)] bg-white/84 text-foreground hover:border-primary/40"
-      }`}
+          : "border-[var(--border)] bg-white/84 text-foreground hover:border-primary/40",
+      )}
       onClick={onClick}
       type="button"
     >

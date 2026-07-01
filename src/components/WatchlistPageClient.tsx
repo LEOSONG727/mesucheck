@@ -1,10 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { BookmarkX, ExternalLink, RotateCcw } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { StateView } from "@/components/StateView";
 import { useToast } from "@/components/ToastProvider";
+import { Badge } from "@/components/ui/Badge";
+import { Button, ButtonLink } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
 import { formatKRWShort } from "@/lib/formatters";
 import {
   getServerWatchlistSnapshot,
@@ -44,7 +46,12 @@ export function WatchlistPageClient(): React.ReactElement {
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {items.map((item) => (
-          <article className="card overflow-hidden" key={item.complexId}>
+          <Surface
+            as="article"
+            className="overflow-hidden"
+            key={item.complexId}
+            padding="none"
+          >
             <div className="border-b border-[var(--border)] p-5">
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div>
@@ -53,74 +60,68 @@ export function WatchlistPageClient(): React.ReactElement {
                   </h2>
                   <p className="mt-1 text-sm text-muted">서울 광진구 {item.dong}</p>
                 </div>
-                <button
-                  className="focus-ring flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent"
-                  onClick={() => removeItem(item.complexId)}
-                  type="button"
+                <Button
                   aria-label="관심단지 제거"
+                  onClick={() => removeItem(item.complexId)}
+                  size="icon"
+                  variant="soft"
                 >
                   <BookmarkX size={17} />
-                </button>
+                </Button>
               </div>
               <div className="mb-4 flex flex-wrap gap-2">
                 {item.riskLabels.map((label) => (
-                  <span
-                    className="rounded-full bg-warning-soft px-3 py-1 text-xs font-extrabold text-warning"
-                    key={label}
-                  >
+                  <Badge key={label} variant="warning">
                     {label}
-                  </span>
+                  </Badge>
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-surface-muted p-4">
+                <Surface padding="sm" radius="md" variant="muted">
                   <div className="text-xs font-bold text-muted">최근 실거래</div>
                   <div className="mt-2 text-lg font-black">
                     {formatKRWShort(item.recentDealKRW)}
                   </div>
-                </div>
-                <div className="rounded-xl bg-surface-muted p-4">
+                </Surface>
+                <Surface padding="sm" radius="md" variant="muted">
                   <div className="text-xs font-bold text-muted">예상 추가비용</div>
                   <div className="mt-2 text-lg font-black">
                     {item.estimatedAdditionalCostKRW
                       ? formatKRWShort(item.estimatedAdditionalCostKRW)
                       : "리포트 후 표시"}
                   </div>
-                </div>
+                </Surface>
               </div>
             </div>
             <div className="grid gap-2 p-4 sm:grid-cols-3">
-              <Link
-                className="focus-ring flex min-h-11 items-center justify-center gap-1 rounded-xl bg-accent px-3 text-sm font-extrabold text-white"
+              <ButtonLink
                 href={`/estimate?complexId=${item.complexId}`}
+                leftIcon={<RotateCcw size={15} />}
+                variant="accent"
               >
-                <RotateCcw size={15} />
                 다시 계산
-              </Link>
-              <Link
-                className="focus-ring flex min-h-11 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-3 text-sm font-bold text-text-subtle"
-                href={`/complexes/${item.complexId}`}
-              >
+              </ButtonLink>
+              <ButtonLink href={`/complexes/${item.complexId}`} variant="ghost">
                 단지 보기
-              </Link>
-              <a
-                className="focus-ring flex min-h-11 items-center justify-center gap-1 rounded-xl border border-[var(--border)] bg-white px-3 text-sm font-bold text-text-subtle"
+              </ButtonLink>
+              <ButtonLink
                 href="https://m.land.naver.com"
                 rel="noopener noreferrer"
+                rightIcon={<ExternalLink size={14} />}
                 target="_blank"
+                variant="ghost"
               >
                 매물
-                <ExternalLink size={14} />
-              </a>
+              </ButtonLink>
             </div>
-          </article>
+          </Surface>
         ))}
       </div>
-      <div className="mt-5 rounded-2xl border border-success/15 bg-success-soft p-5 text-sm leading-7 text-text-subtle">
+      <Surface className="mt-5 text-sm leading-7 text-text-subtle" variant="muted">
         <strong className="text-success">규제·세금 변경 알림은 준비 중입니다.</strong>{" "}
         지금은 이 브라우저에만 저장되며, 실제 알림과 계정 저장은 다음 단계에서
         확장할 예정입니다.
-      </div>
+      </Surface>
     </section>
   );
 }

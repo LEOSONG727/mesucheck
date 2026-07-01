@@ -3,6 +3,7 @@
 import { Mail } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ToastProvider";
+import { Button } from "@/components/ui/Button";
 
 type NewsletterSignupProps = {
   compact?: boolean;
@@ -47,12 +48,9 @@ export function NewsletterSignup({
           type="email"
           value={email}
         />
-        <button
-          className="focus-ring min-h-12 interactive-lift rounded-2xl bg-accent px-5 text-sm font-extrabold text-white"
-          type="submit"
-        >
+        <Button type="submit" variant="accent">
           {subscribed ? "구독 완료" : "구독하기"}
-        </button>
+        </Button>
       </form>
       <div className="mt-4 flex flex-wrap gap-2">
         {["실거래 변화", "취득세·세금", "대출 규제", "생애최초", "관심단지 알림"].map(

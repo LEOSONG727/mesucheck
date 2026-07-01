@@ -2,6 +2,7 @@
 
 import { ChevronDown } from "lucide-react";
 import { useId, useState } from "react";
+import { Surface } from "@/components/ui/Surface";
 
 type CollapsibleSectionProps = {
   title: string;
@@ -20,7 +21,7 @@ export function CollapsibleSection({
   const contentId = useId();
 
   return (
-    <section className="premium-panel overflow-hidden rounded-[24px]">
+    <Surface as="section" className="overflow-hidden" padding="none" variant="premium">
       <button
         aria-controls={contentId}
         aria-expanded={open}
@@ -48,6 +49,6 @@ export function CollapsibleSection({
           {children}
         </div>
       ) : null}
-    </section>
+    </Surface>
   );
 }

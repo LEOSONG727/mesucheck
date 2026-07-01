@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { Bookmark, Home, Newspaper, ShieldCheck } from "lucide-react";
 import { useSyncExternalStore } from "react";
+import { Badge } from "@/components/ui/Badge";
+import { buttonClassName, ButtonLink } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
 import {
   getServerWatchlistSnapshot,
   getWatchlistSnapshot,
@@ -21,7 +24,12 @@ export function Header(): React.ReactElement {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-40">
       <div className="content-shell pt-3">
-        <div className="glass-panel pointer-events-auto flex h-[58px] items-center justify-between gap-3 rounded-[20px] px-3">
+        <Surface
+          className="pointer-events-auto flex h-[58px] items-center justify-between gap-3 px-3"
+          padding="none"
+          radius="lg"
+          variant="glass"
+        >
           <Link
             className="focus-ring flex min-w-0 items-center gap-3 rounded-2xl px-1"
             href="/"
@@ -40,22 +48,28 @@ export function Header(): React.ReactElement {
           </Link>
 
           <nav className="flex items-center gap-2" aria-label="주요 메뉴">
-            <Link
-              className="focus-ring hidden items-center gap-2 rounded-full bg-white/72 px-3 py-2 text-xs font-bold text-success shadow-[var(--shadow-crisp)] sm:flex"
-              href="/newsletter"
+            <Badge
+              className="hidden sm:inline-flex"
+              icon={<ShieldCheck size={14} />}
+              variant="success"
             >
-              <ShieldCheck size={14} />
               검토용 기준
-            </Link>
-            <Link
-              className="focus-ring hidden h-10 items-center gap-2 rounded-full border border-[var(--border)] bg-white/72 px-4 text-sm font-bold text-text-subtle md:flex"
+            </Badge>
+            <ButtonLink
+              className="hidden md:inline-flex"
               href="/newsletter"
+              leftIcon={<Newspaper size={16} />}
+              size="sm"
+              variant="ghost"
             >
-              <Newspaper size={16} />
               뉴스레터
-            </Link>
+            </ButtonLink>
             <Link
-              className="focus-ring relative flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/82 text-primary shadow-[var(--shadow-crisp)]"
+              className={buttonClassName({
+                className: "relative text-primary",
+                size: "icon",
+                variant: "ghost",
+              })}
               href="/watchlist"
               aria-label="관심단지 보기"
             >
@@ -67,7 +81,7 @@ export function Header(): React.ReactElement {
               ) : null}
             </Link>
           </nav>
-        </div>
+        </Surface>
       </div>
     </header>
   );

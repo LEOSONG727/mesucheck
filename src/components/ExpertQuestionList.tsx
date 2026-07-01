@@ -2,6 +2,8 @@
 
 import { Copy } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
+import { Button } from "@/components/ui/Button";
+import { Surface } from "@/components/ui/Surface";
 
 type ExpertQuestionListProps = {
   questions: string[];
@@ -43,40 +45,45 @@ export function ExpertQuestionList({
           <div className="text-xs font-extrabold text-muted">
             전문가에게 물어볼 질문
           </div>
-          <button
-            className="focus-ring rounded-full bg-primary-soft px-3 py-1.5 text-xs font-extrabold text-primary"
+          <Button
             onClick={copyAll}
+            size="sm"
             type="button"
+            variant="soft"
           >
             전체 복사
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="mb-3 flex justify-end">
-          <button
-            className="focus-ring rounded-full bg-primary-soft px-3 py-1.5 text-xs font-extrabold text-primary"
+          <Button
             onClick={copyAll}
+            size="sm"
             type="button"
+            variant="soft"
           >
             전체 복사
-          </button>
+          </Button>
         </div>
       )}
       <div className="grid gap-3">
         {groups.map((group) => (
-          <div
-            className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]"
+          <Surface
+            className="overflow-hidden"
             key={group.title}
+            padding="none"
+            radius="md"
           >
             <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] bg-surface-muted px-4 py-3">
               <h3 className="text-sm font-black">{group.title}</h3>
-              <button
-                className="focus-ring rounded-full bg-white px-3 py-1.5 text-xs font-extrabold text-primary"
+              <Button
                 onClick={() => void copyGroup(group)}
+                size="sm"
                 type="button"
+                variant="ghost"
               >
                 그룹 복사
-              </button>
+              </Button>
             </div>
             {group.questions.map((question) => (
               <div
@@ -86,17 +93,19 @@ export function ExpertQuestionList({
                 <p className="min-w-0 flex-1 text-sm leading-7 text-text-subtle">
                   {question}
                 </p>
-                <button
+                <Button
                   aria-label="질문 복사"
-                  className="focus-ring flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary"
+                  className="shrink-0"
                   onClick={() => void copyQuestion(question)}
+                  size="icon"
                   type="button"
+                  variant="soft"
                 >
                   <Copy size={16} />
-                </button>
+                </Button>
               </div>
             ))}
-          </div>
+          </Surface>
         ))}
       </div>
     </section>

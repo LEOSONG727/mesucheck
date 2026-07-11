@@ -7,6 +7,8 @@ type ReportHeroProps = {
 };
 
 export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
+  const hasExcludedCosts = report.costItems.some((item) => !item.isIncludedInTotal);
+
   return (
     <section className="relative isolate overflow-hidden rounded-[30px] bg-primary-strong p-6 text-white shadow-[var(--shadow-lifted)] md:p-8">
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(135deg,rgba(255,255,255,0.13),transparent_42%),linear-gradient(180deg,#101f32,#17324d)]" />
@@ -25,7 +27,9 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
         <div>
-          <p className="text-sm font-semibold text-white/58">매매가 외 예상 추가 비용</p>
+          <p className="text-sm font-semibold text-white/58">
+            {hasExcludedCosts ? "현재 산정 가능한 추가 비용" : "매매가 외 예상 추가 비용"}
+          </p>
           <div className="mt-2 text-[clamp(3rem,7vw,5.25rem)] font-black leading-none">
             {formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
           </div>
@@ -35,6 +39,9 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
               {formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
             </strong>
             이 추가로 필요할 수 있어요.
+            {hasExcludedCosts
+              ? " 별도 확인 항목은 이 금액과 총액에서 제외했습니다."
+              : null}
           </p>
         </div>
 
@@ -44,7 +51,7 @@ export function ReportHero({ report }: ReportHeroProps): React.ReactElement {
             value={formatKRWShort(report.summary.purchasePriceKRW)}
           />
           <HeroMetric
-            label="총 예상 매입 비용"
+            label={hasExcludedCosts ? "산정 가능 항목 기준 합계" : "총 예상 매입 비용"}
             value={formatKRWShort(report.summary.estimatedTotalAcquisitionCostKRW)}
           />
           <Badge className="justify-center rounded-2xl px-4 py-3 text-white/62" variant="inverted">

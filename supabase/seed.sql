@@ -46,24 +46,29 @@ insert into regulated_zones (
 
 insert into acquisition_tax_rules (
   home_count_min, home_count_max, zone_type, price_min_krw, price_max_krw, area_threshold_m2,
-  acquisition_tax_rate, acquisition_tax_formula, local_education_tax_rate, special_rural_tax_rate,
+  calculation_type, acquisition_tax_rate, acquisition_tax_formula, formula_key, formula_params,
+  local_education_tax_rate, special_rural_tax_rate,
   label, description, law_ref_id, effective_from, basis_date, verification_status, memo
 ) values
-  (1, 1, 'common', 0, 600000000, 85, 0.01, null, 0.002, 0, '1주택 6억 이하', '1주택 일반지역 6억 이하 주택 취득세 참고 규칙입니다.', '11111111-1111-4111-8111-111111111111', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 실제 적용 전 세무 검증 필요.'),
-  (1, 1, 'common', 600000001, 900000000, 85, null, '6억 초과 9억 이하 구간은 점진 세율 적용 가능성이 있어 별도 계산식 검증 필요', 0.002, 0, '1주택 6~9억', '점진세율 구간은 규칙 엔진 Phase에서 테스트 케이스로 검증합니다.', '11111111-1111-4111-8111-111111111111', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 실제 적용 전 세무 검증 필요.'),
-  (1, 1, 'common', 900000001, null, 85, 0.03, null, 0.002, 0, '1주택 9억 초과', '1주택 일반지역 9억 초과 주택 취득세 참고 규칙입니다.', '11111111-1111-4111-8111-111111111111', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 실제 적용 전 세무 검증 필요.'),
-  (2, 2, 'regulated', 0, null, 85, null, '조정대상지역/투기과열지구 2주택 중과 가능성은 일시적 2주택 등 예외 확인 필요', 0.004, 0, '2주택 규제지역', '사용자 세부 조건에 따라 중과 또는 예외가 달라질 수 있습니다.', '11111111-1111-4111-8111-111111111111', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 실제 적용 전 세무 검증 필요.'),
-  (1, null, 'any', 0, null, 85.0001, null, '85㎡ 초과 주택은 농어촌특별세 적용 가능성 검토', null, 0.002, '85㎡ 초과 농어촌특별세', '전용면적 85㎡ 초과 여부에 따라 항목이 표시될 수 있습니다.', '33333333-3333-4333-8333-333333333333', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 실제 적용 전 세무 검증 필요.');
+  (1, 1, 'common', 0, 600000000, 85, 'flat_rate', 0.01, null, null, null, 0.002, 0, '1주택 6억 이하', '1주택 일반 세율 검토 규칙입니다.', '11111111-1111-4111-8111-111111111111', '2026-04-24', '2026-06-30', 'needs_review', '공식 법령 대조 완료. 런칭 전 세무 전문가 최종 검증 필요.'),
+  (1, 1, 'common', 600000001, 900000000, 85, 'linear_rate', null, '취득가액×2/3억원-3 후 백분율 환산', 'price_linear_rate', '{"priceUnitKRW":100000000,"coefficientNumerator":2,"coefficientDenominator":3,"offset":3,"percentDivisor":100,"decimalPlaces":4}'::jsonb, 0.002, 0, '1주택 6억 초과 9억 이하', '지방세법 제11조의 점진 세율 산식 검토 규칙입니다.', '11111111-1111-4111-8111-111111111111', '2026-04-24', '2026-06-30', 'needs_review', '공식 법령 대조 완료. 지방교육세 포함 최종 세무 검증 필요.'),
+  (1, 1, 'common', 900000001, null, 85, 'flat_rate', 0.03, null, null, null, 0.002, 0, '1주택 9억 초과', '1주택 일반 세율 검토 규칙입니다.', '11111111-1111-4111-8111-111111111111', '2026-04-24', '2026-06-30', 'needs_review', '공식 법령 대조 완료. 런칭 전 세무 전문가 최종 검증 필요.'),
+  (2, 2, 'regulated', 0, null, 85, 'expert_check', null, '일시적 2주택 등 예외 확인 필요', null, null, null, null, '2주택 규제지역', '사용자 세부 조건에 따라 중과 또는 예외가 달라져 금액을 확정하지 않습니다.', '11111111-1111-4111-8111-111111111111', '2026-04-24', '2026-06-30', 'needs_review', '일시적 2주택 여부를 포함한 전문가 검증 필요.'),
+  (1, null, 'any', 0, null, 85.0001, 'flat_rate', null, '85㎡ 초과 농어촌특별세 적용 가능성 검토', null, null, null, 0.002, '85㎡ 초과 농어촌특별세', '전용면적 85㎡ 초과 여부에 따라 항목이 표시될 수 있습니다.', '33333333-3333-4333-8333-333333333333', '2026-04-24', '2026-06-30', 'needs_review', '실제 적용 전 세무 전문가 검증 필요.');
 
 insert into incidental_fees (
-  fee_key, label, calculation_type, price_min_krw, price_max_krw, rate, fixed_amount_krw, min_amount_krw, max_amount_krw,
+  fee_key, label, calculation_type, price_min_krw, price_max_krw, rate, cap_amount_krw, fixed_amount_krw, min_amount_krw, max_amount_krw,
   confidence_label, description, law_ref_id, effective_from, basis_date, verification_status, memo
 ) values
-  ('brokerage_fee', '부동산 중개보수', 'rate', 900000000, 1200000000, 0.006, null, null, null, 'variable', '거래금액 구간별 상한이 있으며 실제 보수는 협의와 부가세 여부에 따라 달라질 수 있습니다.', '44444444-4444-4444-8444-444444444444', '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 공인중개사 검증 필요.'),
-  ('registration_related', '등기 관련 비용', 'range', null, null, null, null, 1200000, 2600000, 'variable', '등록면허세, 등기 신청 방식, 법무사 이용 여부, 국민주택채권 부담에 따라 달라질 수 있습니다.', null, '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 법무사 검증 필요.'),
-  ('stamp_and_legal', '인지세 + 법무사 수수료', 'range', null, null, null, null, 700000, 1800000, 'variable', '계약서 인지세와 등기 대리 수수료는 거래 조건과 위임 범위에 따라 달라질 수 있습니다.', null, '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 법무사 검증 필요.'),
-  ('national_housing_bond', '국민주택채권', 'manual_note', null, null, null, null, null, null, 'needs_expert_check', '등기 시 매입과 할인 매각 방식에 따라 실제 부담액이 달라질 수 있어 별도 확인이 필요합니다.', null, '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 법무사 검증 필요.'),
-  ('ltv_dsr', 'LTV·DSR', 'manual_note', null, null, null, null, null, null, 'concept_only', '정밀 대출 한도 계산은 하지 않고 금융기관 심사 확인이 필요한 개념으로 안내합니다.', null, '2026-01-01', '2026-06-30', 'needs_review', 'MVP seed. 대출 전문가 검증 필요.');
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 0, 49999999, 0.006, 250000, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 50000000, 199999999, 0.005, 800000, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 200000000, 899999999, 0.004, null, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 900000000, 1199999999, 0.005, null, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 1200000000, 1499999999, 0.006, null, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('brokerage_fee', '부동산 중개보수 상한', 'rate', 1500000000, null, 0.007, null, null, null, null, 'variable', '서울시 주택 매매 중개보수 상한이며 실제 보수는 상한 이내에서 협의합니다.', '44444444-4444-4444-8444-444444444444', '2021-12-30', '2026-06-30', 'needs_review', '서울시 공개 요율표 대조. 부가세 포함 여부 별도 확인.'),
+  ('registration_related', '등기 관련 비용', 'range', null, null, null, null, null, 1200000, 2600000, 'variable', '등록면허세, 등기 신청 방식, 법무사 이용 여부, 국민주택채권 부담에 따라 달라질 수 있습니다.', null, '2026-01-01', '2026-06-30', 'needs_review', '법무사 검증 필요.'),
+  ('stamp_and_legal', '인지세 + 법무사 수수료', 'range', null, null, null, null, null, 700000, 1800000, 'variable', '계약서 인지세와 등기 대리 수수료는 거래 조건과 위임 범위에 따라 달라질 수 있습니다.', null, '2026-01-01', '2026-06-30', 'needs_review', '법무사 검증 필요.'),
+  ('national_housing_bond', '국민주택채권', 'manual_note', null, null, null, null, null, null, null, 'needs_expert_check', '등기 시 매입과 할인 매각 방식에 따라 실제 부담액이 달라질 수 있어 별도 확인이 필요합니다.', null, '2026-01-01', '2026-06-30', 'needs_review', '법무사 검증 필요.');
 
 insert into concept_notes (
   note_key, title, summary, body, confidence_label, basis_date, verification_status, memo

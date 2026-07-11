@@ -67,8 +67,11 @@ create table if not exists acquisition_tax_rules (
   price_min_krw bigint,
   price_max_krw bigint,
   area_threshold_m2 numeric,
+  calculation_type text check (calculation_type in ('flat_rate', 'linear_rate', 'expert_check')),
   acquisition_tax_rate numeric,
   acquisition_tax_formula text,
+  formula_key text,
+  formula_params jsonb,
   local_education_tax_rate numeric,
   special_rural_tax_rate numeric,
   label text not null,
@@ -90,6 +93,7 @@ create table if not exists incidental_fees (
   price_min_krw bigint,
   price_max_krw bigint,
   rate numeric,
+  cap_amount_krw bigint,
   fixed_amount_krw bigint,
   min_amount_krw bigint,
   max_amount_krw bigint,
@@ -103,6 +107,14 @@ create table if not exists incidental_fees (
   memo text,
   created_at timestamptz default now()
 );
+
+alter table acquisition_tax_rules
+  add column if not exists calculation_type text,
+  add column if not exists formula_key text,
+  add column if not exists formula_params jsonb;
+
+alter table incidental_fees
+  add column if not exists cap_amount_krw bigint;
 
 create table if not exists regulated_zones (
   id uuid primary key default gen_random_uuid(),

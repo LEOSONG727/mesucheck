@@ -1,25 +1,15 @@
-import { buildMockReport } from "@/data/mock-data";
 import { getComplexById } from "@/lib/repositories/complexes";
+import { getCostRuleSet } from "@/lib/repositories/cost-rules";
+import { calculateCostEstimate } from "@/lib/rules/cost-engine";
+import { parseCostEstimateRequest } from "@/lib/rules/cost-estimate-validation";
+import { defaultConditions } from "@/data/mock-data";
 import type { BuyerConditions, CostEstimateReport } from "@/types/maesucheck";
 
 export async function buildEstimateReport(
   partialConditions: Partial<BuyerConditions> = {},
 ): Promise<CostEstimateReport> {
-  const mockReport = buildMockReport(partialConditions);
-  const complex = await getComplexById(mockReport.input.complexId);
-
-  return {
-    ...mockReport,
-    summary: {
-      ...mockReport.summary,
-      complexName: complex.name,
-      basisDate: complex.basisDate,
-    },
-    input: {
-      ...mockReport.input,
-      complexId: complex.id,
-    },
-    conditionSummary: [complex.name, ...mockReport.conditionSummary.slice(1)],
-    externalLinks: complex.externalLinks,
-  };
+  const input = parseCostEstimateRequest({ ...defaultConditions, ...partialConditions });
+  const complex = await getComplexById(input.complexId);
+  const rules = await getCostRuleSet(complex.lawdCd);
+  return calculateCostEstimate(input, complex, rules);
 }

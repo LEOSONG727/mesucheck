@@ -103,6 +103,88 @@ export type CostEstimateReport = {
   disclaimer: string;
 };
 
+export type RuleVerificationStatus = "needs_review" | "verified";
+
+export type AcquisitionTaxCalculationType =
+  | "flat_rate"
+  | "linear_rate"
+  | "expert_check";
+
+export type AcquisitionTaxRule = {
+  id: string;
+  homeCountMin: number;
+  homeCountMax?: number;
+  zoneType: "common" | "regulated" | "any";
+  priceMinKRW?: number;
+  priceMaxKRW?: number;
+  areaThresholdM2?: number;
+  calculationType: AcquisitionTaxCalculationType;
+  acquisitionTaxRate?: number;
+  formulaKey?: "price_linear_rate";
+  formulaParams?: Record<string, number>;
+  localEducationTaxRate?: number;
+  specialRuralTaxRate?: number;
+  label: string;
+  description: string;
+  lawRefId?: string;
+  effectiveFrom: string;
+  effectiveTo?: string;
+  basisDate: string;
+  verificationStatus: RuleVerificationStatus;
+};
+
+export type IncidentalFeeRule = {
+  id: string;
+  feeKey: string;
+  label: string;
+  calculationType: "fixed" | "rate" | "range" | "manual_note";
+  priceMinKRW?: number;
+  priceMaxKRW?: number;
+  rate?: number;
+  capAmountKRW?: number;
+  fixedAmountKRW?: number;
+  minAmountKRW?: number;
+  maxAmountKRW?: number;
+  confidenceLabel: ConfidenceLabel;
+  description: string;
+  lawRefId?: string;
+  effectiveFrom: string;
+  effectiveTo?: string;
+  basisDate: string;
+  verificationStatus: RuleVerificationStatus;
+};
+
+export type LawReference = {
+  id: string;
+  title: string;
+  sourceUrl?: string;
+  basisDate: string;
+  verificationStatus: RuleVerificationStatus;
+};
+
+export type ConceptNoteRule = {
+  key: string;
+  title: string;
+  summary: string;
+  body?: string;
+  confidenceLabel: ConfidenceLabel;
+  basisDate: string;
+  verificationStatus: RuleVerificationStatus;
+};
+
+export type CostRuleSet = {
+  acquisitionTaxRules: AcquisitionTaxRule[];
+  incidentalFeeRules: IncidentalFeeRule[];
+  lawReferences: LawReference[];
+  conceptNotes: ConceptNoteRule[];
+  zoneType: "common" | "regulated";
+  zoneLabels: string[];
+  basisDate: string;
+  source: "supabase" | "seed_fallback";
+};
+
+export type CostEstimateRequest = BuyerConditions;
+
 export type WatchlistItem = {
   complexId: string;
   complexName: string;

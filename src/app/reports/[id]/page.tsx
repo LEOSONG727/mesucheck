@@ -36,6 +36,7 @@ export default async function ReportPage({
   const report = await buildEstimateReport(conditions);
   const complex = await getComplexById(report.input.complexId);
   const naverLink = report.externalLinks.naverLand ?? "https://m.land.naver.com";
+  const hasExcludedCosts = report.costItems.some((item) => !item.isIncludedInTotal);
 
   return (
     <section className="content-shell grid gap-5 py-8">
@@ -114,15 +115,20 @@ export default async function ReportPage({
 
             <Surface className="grid gap-2" padding="sm" radius="md" variant="muted">
               <MiniMetric
-                label="매매가 외 추가 비용"
+                label={hasExcludedCosts ? "산정 가능한 추가 비용" : "매매가 외 추가 비용"}
                 value={formatKRWShort(report.summary.estimatedAdditionalCostKRW)}
               />
               <MiniMetric
-                label="총 예상 매입 비용"
+                label={hasExcludedCosts ? "산정 가능 항목 기준 합계" : "총 예상 매입 비용"}
                 value={formatKRWShort(
                   report.summary.estimatedTotalAcquisitionCostKRW,
                 )}
               />
+              {hasExcludedCosts ? (
+                <p className="text-xs leading-5 text-warning">
+                  별도 확인 항목은 합계에서 제외했습니다.
+                </p>
+              ) : null}
             </Surface>
 
             <WatchlistCTA

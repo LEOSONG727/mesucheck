@@ -30,13 +30,16 @@ export function TrendChart({ points }: TrendChartProps): React.ReactElement {
   const path = chart
     .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
     .join(" ");
+  const periodLabel = points.length
+    ? `${points[0].month}–${points.at(-1)?.month}`
+    : "거래 없음";
 
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-soft)]">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
         <div>
           <h3 className="text-base font-black">평단가 추이</h3>
-          <p className="mt-1 text-xs text-muted">2026년 1월-6월 · 원/평</p>
+          <p className="mt-1 text-xs text-muted">{periodLabel} · 원/평</p>
         </div>
         {activePoint ? (
           <div className="rounded-xl bg-primary-soft px-3 py-2 text-right">
@@ -120,8 +123,8 @@ export function TrendChart({ points }: TrendChartProps): React.ReactElement {
         </svg>
       </div>
       <p className="mt-3 border-t border-[var(--border)] pt-3 text-sm leading-6 text-text-subtle">
-        최근 6개월 거래량이 많지 않아 개별 거래가 평균에 미치는 영향이 클 수
-        있어요. 기준일 이후의 변화는 외부 서비스에서도 함께 확인하세요.
+        월별 동일 단지·유사 면적 거래의 평균 평단가입니다. 거래량이 적으면 개별
+        거래가 평균에 미치는 영향이 클 수 있어요.
       </p>
     </div>
   );

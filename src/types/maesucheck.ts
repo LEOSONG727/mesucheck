@@ -28,6 +28,7 @@ export type Complex = {
   zoneLabels: string[];
   externalLinks: ExternalLinks;
   trend: TrendPoint[];
+  marketSnapshot?: import("@/types/public-data").ComplexMarketSnapshot;
 };
 
 export type TrendPoint = {

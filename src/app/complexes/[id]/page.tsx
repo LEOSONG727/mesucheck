@@ -2,7 +2,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ComplexSummaryCard } from "@/components/ComplexSummaryCard";
 import { StateView } from "@/components/StateView";
-import { findComplexById } from "@/lib/repositories/complexes";
+import { findComplexByIdWithLiveMarket } from "@/lib/repositories/complexes";
+
+export const dynamic = "force-dynamic";
 
 type ComplexPageProps = {
   params: Promise<{ id: string }>;
@@ -17,7 +19,7 @@ export default async function ComplexPage({
     return <StateView state="error" />;
   }
 
-  const complex = await findComplexById(id);
+  const complex = await findComplexByIdWithLiveMarket(id);
 
   if (!complex) {
     return <StateView state="empty" />;

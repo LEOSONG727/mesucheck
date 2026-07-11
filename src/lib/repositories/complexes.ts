@@ -5,6 +5,7 @@ import {
 } from "@/data/mock-data";
 import { filterComplexes } from "@/lib/complex-search";
 import { calculatePyeongPrice, safeNumber } from "@/lib/formatters";
+import { getComplexMarketSnapshot } from "@/lib/public-data/market-snapshot";
 import { shouldUseSupabaseDataSource } from "@/lib/repositories/data-source";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import type { Complex, TrendPoint } from "@/types/maesucheck";
@@ -67,6 +68,37 @@ export async function findComplexById(id: string | undefined): Promise<Complex |
 
 export async function getComplexById(id: string | undefined): Promise<Complex> {
   return (await findComplexById(id)) ?? getMockComplexById(id);
+}
+
+export async function findComplexByIdWithLiveMarket(
+  id: string | undefined,
+): Promise<Complex | null> {
+  const complex = await findComplexById(id);
+  if (!complex) return null;
+
+  const marketSnapshot = await getComplexMarketSnapshot(complex);
+  if (marketSnapshot.status !== "ok" || !marketSnapshot.recentTrade) {
+    return { ...complex, marketSnapshot };
+  }
+
+  return {
+    ...complex,
+    recentDealKRW: marketSnapshot.recentTrade.dealAmountKRW,
+    recentDealDate: marketSnapshot.recentTrade.dealDate,
+    pyeongPriceKRW: calculatePyeongPrice(
+      marketSnapshot.recentTrade.dealAmountKRW,
+      marketSnapshot.recentTrade.areaM2,
+    ),
+    sixMonthChangePercent:
+      marketSnapshot.sixMonthChangePercent ?? complex.sixMonthChangePercent,
+    sixMonthTradeCount: marketSnapshot.tradeCount,
+    jeonseRatioPercent:
+      marketSnapshot.jeonseRatioPercent ?? complex.jeonseRatioPercent,
+    basisDate: marketSnapshot.recentTrade.dealDate,
+    verificationStatus: "verified",
+    trend: marketSnapshot.trend.length > 0 ? marketSnapshot.trend : complex.trend,
+    marketSnapshot,
+  };
 }
 
 async function fetchSupabaseComplexes(): Promise<Complex[]> {

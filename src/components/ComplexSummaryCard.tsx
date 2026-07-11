@@ -47,6 +47,13 @@ export function ComplexSummaryCard({
                 <Badge variant="success">
                   기준일 {complex.basisDate}
                 </Badge>
+                <Badge
+                  variant={complex.marketSnapshot?.status === "ok" ? "success" : "neutral"}
+                >
+                  {complex.marketSnapshot?.status === "ok"
+                    ? "국토부 실거래가"
+                    : "검토용 데이터"}
+                </Badge>
               </div>
             </div>
             {detailed ? (
@@ -94,6 +101,41 @@ export function ComplexSummaryCard({
 
       {detailed ? (
         <>
+          {complex.marketSnapshot ? (
+            <Surface as="section" padding="md" variant="muted">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-black">공공데이터 조회 상태</h2>
+                  <p className="mt-2 text-sm leading-6 text-text-subtle">
+                    {complex.marketSnapshot.message}
+                  </p>
+                </div>
+                <Badge
+                  variant={complex.marketSnapshot.status === "ok" ? "success" : "warning"}
+                >
+                  {complex.marketSnapshot.status === "ok"
+                    ? `매매 ${complex.marketSnapshot.tradeCount}건 · 전세 ${complex.marketSnapshot.rentCount}건`
+                    : "기존 검토용 값 유지"}
+                </Badge>
+              </div>
+              {complex.marketSnapshot.status === "ok" ? (
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  <MarketValue
+                    label="유사면적 매매 중앙값"
+                    value={formatKRWShort(complex.marketSnapshot.medianTradePriceKRW ?? 0)}
+                  />
+                  <MarketValue
+                    label="최저–최고"
+                    value={`${formatKRWShort(complex.marketSnapshot.minTradePriceKRW ?? 0)}–${formatKRWShort(complex.marketSnapshot.maxTradePriceKRW ?? 0)}`}
+                  />
+                  <MarketValue
+                    label="조회 면적"
+                    value={`${complex.defaultAreaM2}㎡ ±3㎡`}
+                  />
+                </div>
+              ) : null}
+            </Surface>
+          ) : null}
           <TrendChart points={complex.trend} />
           <ExternalListingLinks links={complex.externalLinks} />
           <Surface
@@ -101,9 +143,13 @@ export function ComplexSummaryCard({
             className="text-sm leading-7 text-text-subtle"
             variant="muted"
           >
-            <strong className="text-success">참고용 데이터입니다.</strong> 실거래 흐름은
-            {` ${getBasisDateLabel(complex.basisDate)} `}검토용 데이터 기준이며,
-            실제 매물 호가와 최신 거래는 외부 서비스에서 함께 확인하세요.
+            <strong className="text-success">
+              {complex.marketSnapshot?.status === "ok"
+                ? "국토교통부 공개자료입니다."
+                : "참고용 데이터입니다."}
+            </strong>{" "}
+            실거래 흐름은 {getBasisDateLabel(complex.basisDate)} 기준이며, 신고 취소·정정
+            및 최신 매물 호가는 외부 서비스에서도 함께 확인하세요.
           </Surface>
           <ButtonLink
             href={`/estimate?complexId=${complex.id}`}
@@ -116,6 +162,15 @@ export function ComplexSummaryCard({
         </>
       ) : null}
     </article>
+  );
+}
+
+function MarketValue({ label, value }: { label: string; value: string }): React.ReactElement {
+  return (
+    <div className="rounded-xl bg-white p-3">
+      <div className="text-xs font-bold text-muted">{label}</div>
+      <div className="mt-1 text-base font-black">{value}</div>
+    </div>
   );
 }
 

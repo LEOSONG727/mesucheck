@@ -47,6 +47,33 @@ export type PublicApiMeta = {
   totalRows: number;
 };
 
+export type PublicApartmentAreaOption = {
+  complexId: string;
+  areaM2: number;
+  tradeCount: number;
+  recentDealDate: string;
+  recentDealAmountKRW: number;
+};
+
+export type PublicApartmentSearchResult = {
+  apartmentName: string;
+  lawdCd: string;
+  dongName: string;
+  jibun: string;
+  builtYear?: number;
+  tradeCount: number;
+  recentDealDate: string;
+  recentDealAmountKRW: number;
+  areas: PublicApartmentAreaOption[];
+};
+
+export type PublicComplexIdentity = {
+  lawdCd: string;
+  apartmentName: string;
+  areaM2: number;
+  fullLegalName: string;
+};
+
 export type ComplexMarketSnapshot = {
   apartmentName: string;
   areaM2: number;

@@ -42,7 +42,11 @@ export function ComplexSummaryCard({
                   </Badge>
                 ))}
                 <Badge variant="neutral">
-                  {complex.builtYear}년 · {complex.householdCount.toLocaleString("ko-KR")}세대
+                  {complex.builtYear > 0 ? `${complex.builtYear}년` : "준공연도 확인 필요"}
+                  {" · "}
+                  {complex.householdCount > 0
+                    ? `${complex.householdCount.toLocaleString("ko-KR")}세대`
+                    : "세대수 확인 필요"}
                 </Badge>
                 <Badge variant="success">
                   기준일 {complex.basisDate}

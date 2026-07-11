@@ -5,6 +5,7 @@ import {
 } from "@/data/mock-data";
 import { filterComplexes } from "@/lib/complex-search";
 import { calculatePyeongPrice, safeNumber } from "@/lib/formatters";
+import { parsePublicComplexId } from "@/lib/public-data/complex-discovery";
 import { getComplexMarketSnapshot } from "@/lib/public-data/market-snapshot";
 import { shouldUseSupabaseDataSource } from "@/lib/repositories/data-source";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
@@ -62,12 +63,22 @@ export async function findComplexById(id: string | undefined): Promise<Complex |
     return null;
   }
 
+  const publicIdentity = parsePublicComplexId(id);
+  if (publicIdentity) {
+    return getPublicDataComplex(id, publicIdentity);
+  }
+
   const complexes = await getComplexes();
   return complexes.find((complex) => complex.id === id) ?? null;
 }
 
 export async function getComplexById(id: string | undefined): Promise<Complex> {
-  return (await findComplexById(id)) ?? getMockComplexById(id);
+  const complex = await findComplexById(id);
+  if (complex) return complex;
+  if (id?.startsWith("public-v1:")) {
+    throw new Error("선택한 공개데이터 단지를 다시 조회하지 못했습니다.");
+  }
+  return getMockComplexById(id);
 }
 
 export async function findComplexByIdWithLiveMarket(
@@ -150,6 +161,51 @@ async function fetchSupabaseComplexes(): Promise<Complex[]> {
       zones.filter((zone) => zone.lawd_cd === complex.lawd_cd),
     ),
   );
+}
+
+async function getPublicDataComplex(
+  id: string,
+  identity: NonNullable<ReturnType<typeof parsePublicComplexId>>,
+): Promise<Complex | null> {
+  const snapshot = await getComplexMarketSnapshot({
+    name: identity.apartmentName,
+    lawdCd: identity.lawdCd,
+    defaultAreaM2: identity.areaM2,
+  });
+  if (snapshot.status !== "ok" || !snapshot.recentTrade) {
+    return null;
+  }
+
+  const locationParts = identity.fullLegalName.split(/\s+/).filter(Boolean);
+  const recent = snapshot.recentTrade;
+  return {
+    id,
+    name: identity.apartmentName,
+    sido: locationParts[0] ?? "",
+    sigungu: locationParts.slice(1, -1).join(" "),
+    dong: recent.dongName || locationParts.at(-1) || "",
+    lawdCd: identity.lawdCd,
+    address: `${identity.fullLegalName} ${recent.jibun}`.trim(),
+    builtYear: recent.builtYear ?? 0,
+    householdCount: 0,
+    defaultAreaM2: identity.areaM2,
+    recentDealKRW: recent.dealAmountKRW,
+    recentDealDate: recent.dealDate,
+    pyeongPriceKRW: calculatePyeongPrice(recent.dealAmountKRW, recent.areaM2),
+    sixMonthChangePercent: snapshot.sixMonthChangePercent ?? 0,
+    sixMonthTradeCount: snapshot.tradeCount,
+    jeonseRatioPercent: snapshot.jeonseRatioPercent ?? 0,
+    basisDate: recent.dealDate,
+    verificationStatus: "verified",
+    zoneLabels: ["규제지역 별도 확인"],
+    externalLinks: {
+      naverLand: "https://m.land.naver.com",
+      hogangnono: "https://hogangnono.com",
+      zigbang: "https://www.zigbang.com",
+    },
+    trend: snapshot.trend,
+    marketSnapshot: snapshot,
+  };
 }
 
 function mapComplexRow(

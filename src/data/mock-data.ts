@@ -186,7 +186,11 @@ export const complexes: Complex[] = [
   },
 ];
 
-export const exampleSearchTerms = ["자양동", "래미안", "더샵", "e편한세상", "아크로"];
+export const exampleSearchTerms = [
+  "서울 광진구 자양동",
+  "서울 강남구 대치동",
+  "서울 송파구 잠실동",
+];
 
 export const loadingMessages = [
   "최근 실거래가를 확인하는 중입니다",

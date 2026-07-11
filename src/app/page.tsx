@@ -31,7 +31,7 @@ export default async function HomePage({
         <StepCard
           icon={<SearchCheck size={22} />}
           title="단지를 검색해요"
-          body="현재는 서울 광진구 자양동 주요 단지를 먼저 지원합니다."
+          body="주소로 법정동을 선택하면 최근 6개월 국토부 매매 신고에서 실제 단지와 면적을 찾습니다."
         />
         <StepCard
           icon={<Calculator size={22} />}

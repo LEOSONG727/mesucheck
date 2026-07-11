@@ -233,20 +233,25 @@ function renderStepContent(
   }
 
   if (step === 1) {
+    const areaChoices = Array.from(
+      new Set([complex.defaultAreaM2, 59, 84.9, 114].map((area) => Math.round(area * 10) / 10)),
+    ).sort((a, b) => a - b);
     return (
       <Question
         helper="85㎡ 초과 여부는 세금 항목에서 별도 확인 대상으로 표시될 수 있습니다."
         title="어떤 면적 타입을 생각하고 계세요?"
       >
         <div className="grid gap-2">
-          {[59, 84.9, 114].map((area) => (
+          {areaChoices.map((area) => (
             <ChoiceButton
               active={conditions.areaM2 === area}
               key={area}
               label={`${formatAreaM2(area)}`}
               onClick={() => updateCondition({ areaM2: area })}
               subLabel={
-                area > 85
+                area === complex.defaultAreaM2
+                  ? "선택한 최근 실거래 면적"
+                  : area > 85
                   ? "85㎡ 초과 · 농어촌특별세 확인 필요"
                   : "85㎡ 이하 · 일반적으로 별도 확인 부담이 적어요"
               }

@@ -17,7 +17,7 @@ const defaults = {
   empty: {
     title: "검색 결과를 찾지 못했어요.",
     description:
-      "단지명이나 동 이름을 조금 다르게 입력해보세요. 현재는 자양동 주요 단지를 먼저 지원하고 있어요.",
+      "시·군·구와 법정동 주소를 조금 다르게 입력하거나 최근 실거래가 있는 다른 지역을 찾아보세요.",
   },
   error: {
     title: "정보를 불러오지 못했어요.",
@@ -65,7 +65,7 @@ export function StateView({
 
       {state === "empty" ? (
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {["자양동", "래미안", "더샵", "e편한세상", "아크로"].map((term) => (
+          {["서울 광진구 자양동", "서울 강남구 대치동", "서울 송파구 잠실동"].map((term) => (
             <ButtonLink
               href={`/?q=${encodeURIComponent(term)}`}
               key={term}
